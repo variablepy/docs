@@ -1,0 +1,111 @@
+---
+title: "Create Task Errors"
+description: "Every error returned by /createTask."
+---
+
+[`/createTask`](/endpoints/create-task) returns the following error responses. Every error body has the shape:
+
+```json
+{
+  "status": "error",
+  "message": "..."
+}
+```
+
+## Missing API key
+
+```http
+HTTP/1.1 401
+```
+
+```json
+{
+  "status": "error",
+  "message": "Missing API key"
+}
+```
+
+The request body did not include `key` (or its alias `clientKey`).
+
+## Missing sitekey or siteurl
+
+```http
+HTTP/1.1 400
+```
+
+```json
+{
+  "status": "error",
+  "message": "Missing sitekey or siteurl"
+}
+```
+
+The task object did not include both `sitekey` and `siteurl` (or their aliases `websiteKey` and `websiteURL`).
+
+## Missing proxy
+
+```http
+HTTP/1.1 400
+```
+
+```json
+{
+  "status": "error",
+  "message": "Missing proxy"
+}
+```
+
+The task requires a proxy and none was supplied.
+
+<Note>
+  This error does **not** apply to [`TurnstileCaptchaProxyless`](/task-types/turnstile-proxyless), which does not require a proxy.
+</Note>
+
+## Missing user\_agent
+
+```http
+HTTP/1.1 400
+```
+
+```json
+{
+  "status": "error",
+  "message": "Missing user_agent"
+}
+```
+
+An hCaptcha task was submitted without a user agent.
+
+<Note>
+  This error applies to `HCaptchaCaptchaToken` and `HCaptchaEnterpriseToken`. Turnstile tasks accept `user_agent` but do not require it.
+</Note>
+
+## Invalid API key
+
+```http
+HTTP/1.1 403
+```
+
+```json
+{
+  "status": "error",
+  "message": "Invalid API key"
+}
+```
+
+The supplied API key does not exist, is disabled, or is malformed.
+
+## Insufficient balance
+
+```http
+HTTP/1.1 402
+```
+
+```json
+{
+  "status": "error",
+  "message": "Insufficient balance"
+}
+```
+
+Your account does not have enough balance to charge the task. See [Pricing](/guides/pricing) for how much each task costs.

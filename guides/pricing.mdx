@@ -1,0 +1,31 @@
+---
+title: "Pricing"
+description: "How HydroSolve charges tasks."
+---
+
+HydroSolve reports pricing in two different places. It is important to distinguish between them.
+
+## Balance deducted when creating a task
+
+When you submit a task to [`/createTask`](/endpoints/create-task), HydroSolve deducts an amount from your balance based on the task shape:
+
+| Condition | Balance deducted |
+| --- | --- |
+| Base task | `0.5` |
+| Task includes `rqdata` | `1.0` |
+| Task type contains `enterprise` (`HCaptchaEnterprise`) | `1.0` |
+
+## `cost` field returned by /getResult
+
+When a task completes, [`/getResult`](/endpoints/get-result) returns a `cost` field. This is a USD-formatted string describing the reported cost of the solve:
+
+| Task type | Reported `cost` |
+| --- | --- |
+| `HCaptchaCaptchaToken` | `$0.00075` |
+| `HCaptchaEnterpriseToken` | `$0.00150` |
+| `TurnstileCaptcha` | `$0.00060` |
+| `TurnstileCaptchaProxyless` | `$0.00060` |
+
+<Warning>
+  The `cost` field returned by `/getResult` and the balance deducted at `/createTask` are two independent values. Do not treat them as interchangeable.
+</Warning>

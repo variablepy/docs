@@ -1,0 +1,118 @@
+---
+title: "Cloudflare Turnstile"
+description: "Solve Cloudflare Turnstile challenges through your proxy."
+---
+
+`TurnstileCaptcha` solves Cloudflare Turnstile challenges using a proxy you supply.
+
+## Requirements
+
+| Field | Required |
+| --- | --- |
+| API key | Yes |
+| `sitekey` | Yes |
+| `siteurl` | Yes |
+| `proxy` | Yes |
+| `user_agent` | Optional (accepted but not required) |
+| `pageaction` | Optional |
+| `data` | Optional |
+| `pagedata` | Optional |
+
+## Request
+
+```json
+{
+  "key": "YOUR_API_KEY",
+  "type": "TurnstileCaptcha",
+  "task": {
+    "sitekey": "TURNSTILE_SITEKEY",
+    "siteurl": "https://example.com",
+    "proxy": "http://username:password@host:port",
+    "user_agent": "Mozilla/5.0 ...",
+    "pageaction": "",
+    "data": "",
+    "pagedata": ""
+  }
+}
+```
+
+## Turnstile parameters
+
+Only send these when the target Turnstile challenge requires them. Leaving them out is fine for most sites.
+
+| Field | Aliases | Description |
+| --- | --- | --- |
+| `pageaction` | `pageaction`, `pageAction` | Turnstile `pageaction` value. |
+| `data` | `data` | Turnstile `data` value. |
+| `pagedata` | `pagedata`, `pageData`, `chlPageData` | Turnstile `pagedata` value. |
+
+## Examples
+
+<CodeGroup>
+
+```bash cURL
+curl -X POST https://api.hydrosolves.gay/createTask \
+  -H "Content-Type: application/json" \
+  -d '{
+    "key": "YOUR_API_KEY",
+    "type": "TurnstileCaptcha",
+    "task": {
+      "sitekey": "TURNSTILE_SITEKEY",
+      "siteurl": "https://example.com",
+      "proxy": "http://username:password@host:port"
+    }
+  }'
+```
+
+```python Python
+import requests
+
+res = requests.post(
+    "https://api.hydrosolves.gay/createTask",
+    json={
+        "key": "YOUR_API_KEY",
+        "type": "TurnstileCaptcha",
+        "task": {
+            "sitekey": "TURNSTILE_SITEKEY",
+            "siteurl": "https://example.com",
+            "proxy": "http://username:password@host:port",
+        },
+    },
+)
+print(res.json())
+```
+
+```javascript JavaScript
+const res = await fetch("https://api.hydrosolves.gay/createTask", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    key: "YOUR_API_KEY",
+    type: "TurnstileCaptcha",
+    task: {
+      sitekey: "TURNSTILE_SITEKEY",
+      siteurl: "https://example.com",
+      proxy: "http://username:password@host:port",
+    },
+  }),
+});
+console.log(await res.json());
+```
+
+</CodeGroup>
+
+## Successful result
+
+```json
+{
+  "status": "solved",
+  "cost": "$0.00060",
+  "solution": {
+    "token": "TURNSTILE_TOKEN",
+    "user_agent": "Mozilla/5.0 ...",
+    "supressed": false
+  }
+}
+```
+
+Turnstile results additionally return the `user_agent` used by the solver.

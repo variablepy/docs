@@ -1,47 +1,191 @@
 ---
-title: "Quickstart"
-description: "Begin with a guide on the fastest path to a successful outcome"
+title: "Getting Started"
+description: "Get an API key, submit a task, and retrieve a solved token in minutes."
+sidebarTitle: "Getting Started"
 ---
 
-Describe how someone begins using your product. What is the first thing they need to do? Are there any prerequisites?
+This guide walks you through your first HydroSolve solve, from getting an API key to reading the solved token.
 
-A quickstart should take someone from zero to using your product. They'll get a quick win and a sense of what they can accomplish.
+## 1. Get an API key
 
-## Prerequisites
+Purchase an API key from the official HydroSolve store:
 
-Before you begin, you must have:
+<Card title="Get an API Key" icon="key" href="https://hydrosolves.mysellauth.com/">
+  Buy a HydroSolve API key at `hydrosolves.mysellauth.com`.
+</Card>
 
-- Requirement one (for example, Node.js 18+, a free account, an API key)
-- Requirement two (for example, a compatible device, a compatible browser, a compatible operating system)
+Keep this key private. Anyone with your key can spend your balance.
 
-## Get started
+## 2. Learn the base URL
 
-<Steps>
-  <Step title="Install">
-    Describe how to install your product or sign up.
+All requests target a single base URL. Every example in this documentation uses it directly.
 
-    ```bash
-    npm install your-package
-    ```
-  </Step>
-  <Step title="Configure">
-    Describe any setup or configuration needed before first use.
+```text
+https://api.hydrosolves.gay
+```
 
-    ```bash
-    your-cli init
-    ```
-  </Step>
-  <Step title="Run it">
-    Show the first thing a user does to see it working.
+Every endpoint accepts and returns JSON. Set `Content-Type: application/json` on every request that has a body.
 
-    ```bash
-    your-cli start
-    ```
-  </Step>
-</Steps>
+## 3. Submit a task
 
-<Tip>
-  Give people a way to get help. This could be a link to a support page, a chat with a customer support agent, or a forum for your product.
+Send a `POST` request to `/createTask` with your API key and challenge parameters.
 
-  Example: Need help? Reach out to us at [support@yourcompany.com](mailto:support@yourcompany.com).
-</Tip>
+<CodeGroup>
+
+```bash cURL
+curl -X POST https://api.hydrosolves.gay/createTask \
+  -H "Content-Type: application/json" \
+  -d '{
+    "key": "YOUR_API_KEY",
+    "type": "HCaptchaCaptchaToken",
+    "task": {
+      "sitekey": "HCAPTCHA_SITEKEY",
+      "siteurl": "https://example.com",
+      "proxy": "http://username:password@host:port",
+      "user_agent": "Mozilla/5.0 ..."
+    }
+  }'
+```
+
+```python Python
+import requests
+
+r = requests.post(
+    "https://api.hydrosolves.gay/createTask",
+    json={
+        "key": "YOUR_API_KEY",
+        "type": "HCaptchaCaptchaToken",
+        "task": {
+            "sitekey": "HCAPTCHA_SITEKEY",
+            "siteurl": "https://example.com",
+            "proxy": "http://username:password@host:port",
+            "user_agent": "Mozilla/5.0 ...",
+        },
+    },
+)
+task_id = r.json()["task_id"]
+```
+
+```javascript JavaScript
+const res = await fetch("https://api.hydrosolves.gay/createTask", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    key: "YOUR_API_KEY",
+    type: "HCaptchaCaptchaToken",
+    task: {
+      sitekey: "HCAPTCHA_SITEKEY",
+      siteurl: "https://example.com",
+      proxy: "http://username:password@host:port",
+      user_agent: "Mozilla/5.0 ...",
+    },
+  }),
+});
+const { task_id } = await res.json();
+```
+
+</CodeGroup>
+
+A successful submission returns:
+
+```json
+{
+  "status": "queued",
+  "task_id": "TASK_ID"
+}
+```
+
+## 4. Poll for the result
+
+Call `/getResult/{task_id}` until `status` becomes `solved` or `failed`. While the task is still processing, the response is:
+
+```json
+{
+  "status": "solving"
+}
+```
+
+<CodeGroup>
+
+```bash cURL
+curl https://api.hydrosolves.gay/getResult/TASK_ID
+```
+
+```python Python
+import time, requests
+
+while True:
+    r = requests.get(f"https://api.hydrosolves.gay/getResult/{task_id}").json()
+    if r["status"] in ("solved", "failed"):
+        break
+    time.sleep(2)
+
+print(r)
+```
+
+```javascript JavaScript
+let result;
+while (true) {
+  const r = await fetch(`https://api.hydrosolves.gay/getResult/${task_id}`);
+  result = await r.json();
+  if (result.status === "solved" || result.status === "failed") break;
+  await new Promise((r) => setTimeout(r, 2000));
+}
+console.log(result);
+```
+
+</CodeGroup>
+
+A solved response includes the token:
+
+```json
+{
+  "status": "solved",
+  "cost": "$0.00075",
+  "solution": {
+    "token": "HCAPTCHA_TOKEN",
+    "supressed": false
+  }
+}
+```
+
+<Note>
+  Task results are retained for approximately **300 seconds**. Poll and retrieve promptly.
+</Note>
+
+## 5. Check your balance
+
+At any time, `POST` to `/getBalance` with your API key:
+
+```bash
+curl -X POST https://api.hydrosolves.gay/getBalance \
+  -H "Content-Type: application/json" \
+  -d '{ "key": "YOUR_API_KEY" }'
+```
+
+```json
+{
+  "status": "success",
+  "balance": "$1.50"
+}
+```
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Authentication" icon="lock" href="/authentication">
+    How to authenticate your requests.
+  </Card>
+
+  <Card title="Create Task" icon="paper-plane" href="/endpoints/create-task">
+    Full reference for `/createTask`.
+  </Card>
+
+  <Card title="Task types" icon="list-check" href="/task-types/hcaptcha">
+    Every supported challenge.
+  </Card>
+
+  <Card title="Errors" icon="triangle-exclamation" href="/errors/error-codes">
+    Every error the API can return.
+  </Card>
+</CardGroup>

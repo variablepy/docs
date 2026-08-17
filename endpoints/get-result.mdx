@@ -1,0 +1,141 @@
+---
+title: "Get Result"
+description: "Poll for the result of a solving task."
+---
+
+```http
+GET https://api.hydrosolves.gay/getResult/{task_id}
+```
+
+Retrieves the current state of a solving task. Poll this endpoint until `status` is `solved` or `failed`.
+
+<Note>
+  Task results are retained for approximately **300 seconds**. Poll and retrieve promptly.
+</Note>
+
+## Path parameters
+
+<ParamField path="task_id" type="string" required>
+  The task ID returned by [`/createTask`](/endpoints/create-task).
+</ParamField>
+
+## Alternative forms
+
+The API also accepts the task ID as a query parameter or JSON body. The path form is the primary documented method.
+
+```http
+GET https://api.hydrosolves.gay/getResult?task_id=TASK_ID
+```
+
+```http
+POST https://api.hydrosolves.gay/getResult
+Content-Type: application/json
+
+{ "task_id": "TASK_ID" }
+```
+
+Accepted task ID aliases: `task_id`, `taskId`, `taskid`.
+
+## Examples
+
+<CodeGroup>
+
+```bash cURL
+curl https://api.hydrosolves.gay/getResult/TASK_ID
+```
+
+```python Python
+import time, requests
+
+while True:
+    r = requests.get(f"https://api.hydrosolves.gay/getResult/{task_id}").json()
+    if r["status"] in ("solved", "failed"):
+        break
+    time.sleep(2)
+
+print(r)
+```
+
+```javascript JavaScript
+let result;
+while (true) {
+  const r = await fetch(`https://api.hydrosolves.gay/getResult/${task_id}`);
+  result = await r.json();
+  if (result.status === "solved" || result.status === "failed") break;
+  await new Promise((r) => setTimeout(r, 2000));
+}
+console.log(result);
+```
+
+</CodeGroup>
+
+## Responses
+
+### While solving
+
+```json
+{
+  "status": "solving"
+}
+```
+
+The task is still processing. Poll again after a short delay.
+
+### Solved (hCaptcha)
+
+```json
+{
+  "status": "solved",
+  "cost": "$0.00075",
+  "solution": {
+    "token": "HCAPTCHA_TOKEN",
+    "supressed": false
+  }
+}
+```
+
+For `HCaptchaEnterpriseToken`, the `cost` field is `$0.00150`.
+
+<Warning>
+  The field name is exactly `supressed` (single `p`). Do not rename it to `suppressed`.
+</Warning>
+
+### Solved (Turnstile)
+
+```json
+{
+  "status": "solved",
+  "cost": "$0.00060",
+  "solution": {
+    "token": "TURNSTILE_TOKEN",
+    "user_agent": "Mozilla/5.0 ...",
+    "supressed": false
+  }
+}
+```
+
+Turnstile results additionally return the `user_agent` used by the solver.
+
+### Failed
+
+```json
+{
+  "status": "failed",
+  "errorId": 1,
+  "error": "SOLVE_FAILED"
+}
+```
+
+See the [error code reference](/errors/error-codes) for every value the `error` field can take.
+
+## Field reference
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `status` | string | `solving`, `solved`, or `failed`. |
+| `cost` | string | USD-formatted cost of the solve (`solved` only). |
+| `solution.token` | string | The captcha token to submit to the target site. |
+| `solution.supressed` | boolean | Whether the captcha was marked as suppressed by the solver. |
+| `solution.user_agent` | string | The user-agent used by the solver (Turnstile only). |
+| `errorId` | number | Numeric identifier of the failure (`failed` only). |
+| `error` | string | Machine-readable error code (`failed` only). |
