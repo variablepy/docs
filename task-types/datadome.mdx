@@ -1,33 +1,33 @@
 ---
-title: "hCaptcha"
-description: "Solve standard hCaptcha challenges."
+title: "DataDome"
+description: "Solve DataDome challenges and retrieve the DataDome cookie."
 ---
 
-`HCaptchaCaptchaToken` is the default task type. Use it to solve standard hCaptcha challenges.
+`DataDomeTagsCookie` solves DataDome challenges and returns the DataDome cookie token. The solver internally uses the DataDome tags solver.
 
 ## Requirements
 
 | Field | Required |
 | --- | --- |
 | API key | Yes |
-| `sitekey` | Yes |
 | `siteurl` | Yes |
+| `sitekey` | Yes |
 | `proxy` | Yes |
 | `user_agent` | Yes |
-| `rqdata` | Optional |
 
-The API rejects hCaptcha tasks without a proxy or without a user agent.
+<Note>
+  For `DataDomeTagsCookie`, the `sitekey` field carries the DataDome JS URL (the DDJS key input) required by the tags solver.
+</Note>
 
 ## Request
 
 ```json
 {
   "key": "YOUR_API_KEY",
-  "type": "HCaptchaCaptchaToken",
+  "type": "DataDomeTagsCookie",
   "task": {
-    "sitekey": "HCAPTCHA_SITEKEY",
     "siteurl": "https://example.com",
-    "rqdata": "",
+    "sitekey": "https://ct.datadome.co/.../tags.js",
     "proxy": "http://username:password@host:port",
     "user_agent": "Mozilla/5.0 ..."
   }
@@ -43,10 +43,10 @@ curl -X POST https://api.hydrosolves.gay/createTask \
   -H "Content-Type: application/json" \
   -d '{
     "key": "YOUR_API_KEY",
-    "type": "HCaptchaCaptchaToken",
+    "type": "DataDomeTagsCookie",
     "task": {
-      "sitekey": "HCAPTCHA_SITEKEY",
       "siteurl": "https://example.com",
+      "sitekey": "https://ct.datadome.co/.../tags.js",
       "proxy": "http://username:password@host:port",
       "user_agent": "Mozilla/5.0 ..."
     }
@@ -60,10 +60,10 @@ res = requests.post(
     "https://api.hydrosolves.gay/createTask",
     json={
         "key": "YOUR_API_KEY",
-        "type": "HCaptchaCaptchaToken",
+        "type": "DataDomeTagsCookie",
         "task": {
-            "sitekey": "HCAPTCHA_SITEKEY",
             "siteurl": "https://example.com",
+            "sitekey": "https://ct.datadome.co/.../tags.js",
             "proxy": "http://username:password@host:port",
             "user_agent": "Mozilla/5.0 ...",
         },
@@ -78,10 +78,10 @@ const res = await fetch("https://api.hydrosolves.gay/createTask", {
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({
     key: "YOUR_API_KEY",
-    type: "HCaptchaCaptchaToken",
+    type: "DataDomeTagsCookie",
     task: {
-      sitekey: "HCAPTCHA_SITEKEY",
       siteurl: "https://example.com",
+      sitekey: "https://ct.datadome.co/.../tags.js",
       proxy: "http://username:password@host:port",
       user_agent: "Mozilla/5.0 ...",
     },
@@ -92,36 +92,17 @@ console.log(await res.json());
 
 </CodeGroup>
 
-## With rqdata
-
-Supply `rqdata` when the target hCaptcha requires it. Providing `rqdata` changes the create-task balance deduction to `1.0`.
-
-```json
-{
-  "key": "YOUR_API_KEY",
-  "type": "HCaptchaCaptchaToken",
-  "task": {
-    "sitekey": "HCAPTCHA_SITEKEY",
-    "siteurl": "https://example.com",
-    "rqdata": "RQDATA_VALUE",
-    "proxy": "http://username:password@host:port",
-    "user_agent": "Mozilla/5.0 ..."
-  }
-}
-```
-
 ## Successful result
 
 ```json
 {
   "status": "solved",
-  "cost": "$0.00075",
+  "cost": "$0.00100",
   "solution": {
-    "token": "HCAPTCHA_TOKEN",
-    "user_agent": "Mozilla/5.0 ...",
-    "supressed": false
+    "token": "DATADOME_COOKIE",
+    "user_agent": "Mozilla/5.0 ..."
   }
 }
 ```
 
-The reported `cost` is `$0.00075`. See [Pricing](/guides/pricing) for how balance deduction relates to `cost`.
+The reported `cost` is `$0.00100`.

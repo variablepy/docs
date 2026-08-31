@@ -12,6 +12,18 @@ description: "Every error returned by /createTask."
 }
 ```
 
+Which validation errors can be returned depends on the task type you submit.
+
+| HTTP | Message | When |
+| --- | --- | --- |
+| 401 | `Missing API key` | Request body has no `key` or `clientKey`. |
+| 400 | `Missing siteurl` | The task requires `siteurl` and none was supplied. |
+| 400 | `Missing sitekey` | The task requires `sitekey` and none was supplied. |
+| 400 | `Missing proxy` | The task requires a proxy and none was supplied. |
+| 400 | `Missing user_agent` | The task requires a user agent and none was supplied. |
+| 403 | `Invalid API key` | The supplied API key is not registered or is disabled. |
+| 402 | `Insufficient balance` | The account balance is too low to charge the task. |
+
 ## Missing API key
 
 ```http
@@ -40,7 +52,13 @@ HTTP/1.1 400
 }
 ```
 
-The task object did not include both `sitekey` and `siteurl` (or their aliases `websiteKey` and `websiteURL`).
+The task object did not include a required `sitekey` or `siteurl` (or their aliases `websiteKey` and `websiteURL`).
+
+Which fields are required depends on the task type:
+
+- hCaptcha and Turnstile tasks require both `sitekey` and `siteurl`.
+- `DataDomeTagsCookie` requires `sitekey` (the DataDome JS URL) and `siteurl`.
+- AWS WAF tasks require only `siteurl`.
 
 ## Missing proxy
 
@@ -58,7 +76,7 @@ HTTP/1.1 400
 The task requires a proxy and none was supplied.
 
 <Note>
-  This error does **not** apply to [`TurnstileCaptchaProxyless`](/task-types/turnstile-proxyless), which does not require a proxy.
+  This error does **not** apply to [`TurnstileCaptchaProxyless`](/task-types/turnstile-proxyless) or [`AWSWafTokenProxyless`](/task-types/aws-waf-proxyless), which do not require a proxy.
 </Note>
 
 ## Missing user\_agent
@@ -74,10 +92,10 @@ HTTP/1.1 400
 }
 ```
 
-An hCaptcha task was submitted without a user agent.
+A task that requires a user agent was submitted without one.
 
 <Note>
-  This error applies to `HCaptchaCaptchaToken` and `HCaptchaEnterpriseToken`. Turnstile tasks accept `user_agent` but do not require it.
+  This error applies to `HCaptchaCaptchaToken`, `HCaptchaEnterpriseToken`, and `DataDomeTagsCookie`. Turnstile and AWS WAF tasks accept `user_agent` but do not require it.
 </Note>
 
 ## Invalid API key

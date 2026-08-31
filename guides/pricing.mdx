@@ -1,9 +1,23 @@
 ---
 title: "Pricing"
-description: "How HydroSolve charges tasks."
+description: "How HydroSolve charges tasks across every supported captcha type."
 ---
 
 HydroSolve reports pricing in two different places. It is important to distinguish between them.
+
+## Per-solve pricing
+
+Every completed solve reports its cost in the `cost` field returned by [`/getResult`](/endpoints/get-result). Prices are in USD.
+
+| Task type | Price per solve |
+| --- | --- |
+| `HCaptchaCaptchaToken` | `$0.00075` |
+| `HCaptchaEnterpriseToken` | `$0.00150` |
+| `TurnstileCaptcha` | `$0.00060` |
+| `TurnstileCaptchaProxyless` | `$0.00060` |
+| `AWSWafToken` | `$0.00100` |
+| `AWSWafTokenProxyless` | `$0.00100` |
+| `DataDomeTagsCookie` | `$0.00100` |
 
 ## Balance deducted when creating a task
 
@@ -11,21 +25,24 @@ When you submit a task to [`/createTask`](/endpoints/create-task), HydroSolve de
 
 | Condition | Balance deducted |
 | --- | --- |
-| Base task | `0.5` |
-| Task includes `rqdata` | `1.0` |
-| Task type contains `enterprise` (`HCaptchaEnterprise`) | `1.0` |
-
-## `cost` field returned by /getResult
-
-When a task completes, [`/getResult`](/endpoints/get-result) returns a `cost` field. This is a USD-formatted string describing the reported cost of the solve:
-
-| Task type | Reported `cost` |
-| --- | --- |
-| `HCaptchaCaptchaToken` | `$0.00075` |
-| `HCaptchaEnterpriseToken` | `$0.00150` |
-| `TurnstileCaptcha` | `$0.00060` |
-| `TurnstileCaptchaProxyless` | `$0.00060` |
+| Base task | `0.5` solve |
+| hCaptcha task includes `rqdata` | `1.0` solve |
+| Task type contains `enterprise` (`HCaptchaEnterprise`) | `1.0` solve |
 
 <Warning>
   The `cost` field returned by `/getResult` and the balance deducted at `/createTask` are two independent values. Do not treat them as interchangeable.
 </Warning>
+
+## Balance conversion
+
+Your balance is stored in solves and reported in USD by [`/getBalance`](/endpoints/get-balance) using:
+
+```text
+1 solve = $0.0015
+```
+
+## Buy an API key
+
+<Card title="Purchase API Balance" icon="key" href="https://hydrosolves.mysellauth.com/">
+  Buy an API key or top up your balance at `hydrosolves.mysellauth.com`.
+</Card>

@@ -89,6 +89,7 @@ The task is still processing. Poll again after a short delay.
   "cost": "$0.00075",
   "solution": {
     "token": "HCAPTCHA_TOKEN",
+    "user_agent": "Mozilla/5.0 ...",
     "supressed": false
   }
 }
@@ -116,6 +117,36 @@ For `HCaptchaEnterpriseToken`, the `cost` field is `$0.00150`.
 
 Turnstile results additionally return the `user_agent` used by the solver.
 
+### Solved (AWS WAF)
+
+```json
+{
+  "status": "solved",
+  "cost": "$0.00100",
+  "solution": {
+    "token": "AWS_WAF_TOKEN",
+    "user_agent": "Mozilla/5.0 ..."
+  }
+}
+```
+
+The reported `cost` for `AWSWafToken` and `AWSWafTokenProxyless` is `$0.00100`.
+
+### Solved (DataDome)
+
+```json
+{
+  "status": "solved",
+  "cost": "$0.00100",
+  "solution": {
+    "token": "DATADOME_COOKIE",
+    "user_agent": "Mozilla/5.0 ..."
+  }
+}
+```
+
+The reported `cost` for `DataDomeTagsCookie` is `$0.00100`.
+
 ### Failed
 
 ```json
@@ -135,7 +166,7 @@ See the [error code reference](/errors/error-codes) for every value the `error` 
 | `status` | string | `solving`, `solved`, or `failed`. |
 | `cost` | string | USD-formatted cost of the solve (`solved` only). |
 | `solution.token` | string | The captcha token to submit to the target site. |
-| `solution.supressed` | boolean | Whether the captcha was marked as suppressed by the solver. |
-| `solution.user_agent` | string | The user-agent used by the solver (Turnstile only). |
+| `solution.user_agent` | string | The user-agent used by the solver. Returned by hCaptcha, Turnstile, AWS WAF, and DataDome solves. |
+| `solution.supressed` | boolean | Whether the captcha was marked as suppressed. Returned by hCaptcha and Turnstile solves; not present for AWS WAF or DataDome. |
 | `errorId` | number | Numeric identifier of the failure (`failed` only). |
 | `error` | string | Machine-readable error code (`failed` only). |

@@ -28,6 +28,9 @@ Creates an asynchronous solving task and returns a `task_id` you can poll with [
   - `HCaptchaEnterpriseToken`
   - `TurnstileCaptcha`
   - `TurnstileCaptchaProxyless`
+  - `AWSWafToken`
+  - `AWSWafTokenProxyless`
+  - `DataDomeTagsCookie`
 </ParamField>
 
 ### Task parameters
@@ -36,8 +39,8 @@ Creates an asynchronous solving task and returns a `task_id` you can poll with [
   The task parameters. `data` is accepted as an alias for the task object.
 
   <Expandable title="task properties">
-    <ParamField body="sitekey" type="string" required>
-      The target site's captcha sitekey. `websiteKey` is accepted as an alias.
+    <ParamField body="sitekey" type="string">
+      The target site's captcha sitekey. `websiteKey` is accepted as an alias. Required for hCaptcha, Turnstile, and DataDome tasks. Not used by AWS WAF. For `DataDomeTagsCookie`, this field carries the DataDome JS URL used by the tags solver.
     </ParamField>
 
     <ParamField body="siteurl" type="string" required>
@@ -45,11 +48,11 @@ Creates an asynchronous solving task and returns a `task_id` you can poll with [
     </ParamField>
 
     <ParamField body="proxy" type="string">
-      Upstream proxy in `scheme://user:pass@host:port` format. Required for `HCaptchaCaptchaToken`, `HCaptchaEnterpriseToken`, and `TurnstileCaptcha`. Not required for `TurnstileCaptchaProxyless`.
+      Upstream proxy in `scheme://user:pass@host:port` format. Required for `HCaptchaCaptchaToken`, `HCaptchaEnterpriseToken`, `TurnstileCaptcha`, `AWSWafToken`, and `DataDomeTagsCookie`. Not required for `TurnstileCaptchaProxyless` and `AWSWafTokenProxyless`.
     </ParamField>
 
     <ParamField body="user_agent" type="string">
-      Browser user-agent string. Required for hCaptcha tasks. Accepted but not required for Turnstile. Aliases: `useragent`, `userAgent`.
+      Browser user-agent string. Required for hCaptcha and DataDome tasks. Accepted but not required for Turnstile and AWS WAF. Aliases: `useragent`, `userAgent`.
     </ParamField>
 
     <ParamField body="rqdata" type="string">
@@ -67,8 +70,44 @@ Creates an asynchronous solving task and returns a `task_id` you can poll with [
     <ParamField body="pagedata" type="string">
       Turnstile `pagedata`. Aliases: `pageData`, `chlPageData`.
     </ParamField>
+
+    <ParamField body="awsKey" type="string">
+      AWS WAF challenge key. AWS WAF only.
+    </ParamField>
+
+    <ParamField body="awsIv" type="string">
+      AWS WAF initialization vector. AWS WAF only.
+    </ParamField>
+
+    <ParamField body="awsContext" type="string">
+      AWS WAF challenge context. AWS WAF only.
+    </ParamField>
+
+    <ParamField body="awsChallengeJS" type="string">
+      URL of the AWS WAF challenge JavaScript. AWS WAF only.
+    </ParamField>
+
+    <ParamField body="awsApiJs" type="string">
+      URL of the AWS WAF API JavaScript. AWS WAF only.
+    </ParamField>
+
+    <ParamField body="awsProblemUrl" type="string">
+      AWS WAF problem URL. AWS WAF only.
+    </ParamField>
+
+    <ParamField body="awsApiKey" type="string">
+      AWS WAF API key from the challenge page. AWS WAF only.
+    </ParamField>
+
+    <ParamField body="awsExistingToken" type="string">
+      Existing AWS WAF token, when refreshing. AWS WAF only.
+    </ParamField>
   </Expandable>
 </ParamField>
+
+<Note>
+  Required fields depend on the selected task type. See each [task type](/task-types/hcaptcha) page for its exact requirements.
+</Note>
 
 ## Field aliases
 
@@ -103,6 +142,101 @@ The API accepts multiple aliases for common fields so it can slot in as a drop-i
 ```
 
 ## Examples
+
+<Tabs>
+  <Tab title="hCaptcha">
+    ```json
+    {
+      "key": "YOUR_API_KEY",
+      "type": "HCaptchaCaptchaToken",
+      "task": {
+        "sitekey": "HCAPTCHA_SITEKEY",
+        "siteurl": "https://example.com",
+        "proxy": "http://username:password@host:port",
+        "user_agent": "Mozilla/5.0 ..."
+      }
+    }
+    ```
+  </Tab>
+  <Tab title="hCaptcha Enterprise">
+    ```json
+    {
+      "key": "YOUR_API_KEY",
+      "type": "HCaptchaEnterpriseToken",
+      "task": {
+        "sitekey": "HCAPTCHA_SITEKEY",
+        "siteurl": "https://example.com",
+        "proxy": "http://username:password@host:port",
+        "user_agent": "Mozilla/5.0 ..."
+      }
+    }
+    ```
+  </Tab>
+  <Tab title="Turnstile">
+    ```json
+    {
+      "key": "YOUR_API_KEY",
+      "type": "TurnstileCaptcha",
+      "task": {
+        "sitekey": "TURNSTILE_SITEKEY",
+        "siteurl": "https://example.com",
+        "proxy": "http://username:password@host:port"
+      }
+    }
+    ```
+  </Tab>
+  <Tab title="Turnstile Proxyless">
+    ```json
+    {
+      "key": "YOUR_API_KEY",
+      "type": "TurnstileCaptchaProxyless",
+      "task": {
+        "sitekey": "TURNSTILE_SITEKEY",
+        "siteurl": "https://example.com"
+      }
+    }
+    ```
+  </Tab>
+  <Tab title="AWS WAF">
+    ```json
+    {
+      "key": "YOUR_API_KEY",
+      "type": "AWSWafToken",
+      "task": {
+        "siteurl": "https://example.com",
+        "proxy": "http://username:password@host:port"
+      }
+    }
+    ```
+  </Tab>
+  <Tab title="AWS WAF Proxyless">
+    ```json
+    {
+      "key": "YOUR_API_KEY",
+      "type": "AWSWafTokenProxyless",
+      "task": {
+        "siteurl": "https://example.com"
+      }
+    }
+    ```
+  </Tab>
+  <Tab title="DataDome">
+    ```json
+    {
+      "key": "YOUR_API_KEY",
+      "type": "DataDomeTagsCookie",
+      "task": {
+        "siteurl": "https://example.com",
+        "sitekey": "https://ct.datadome.co/.../tags.js",
+        "proxy": "http://username:password@host:port",
+        "user_agent": "Mozilla/5.0 ..."
+      }
+    }
+    ```
+  </Tab>
+</Tabs>
+
+### hCaptcha in cURL, Python, and JavaScript
 
 <CodeGroup>
 

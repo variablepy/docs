@@ -58,7 +58,10 @@
           "task-types/hcaptcha",
           "task-types/hcaptcha-enterprise",
           "task-types/turnstile",
-          "task-types/turnstile-proxyless"
+          "task-types/turnstile-proxyless",
+          "task-types/aws-waf",
+          "task-types/aws-waf-proxyless",
+          "task-types/datadome"
         ]
       },
       {
@@ -77,6 +80,16 @@
           "guides/pricing",
           "guides/result-retention",
           "guides/security"
+        ]
+      },
+      {
+        "group": "Admin API",
+        "icon": "shield-halved",
+        "pages": [
+          "admin/overview",
+          "admin/create-key",
+          "admin/add-balance",
+          "admin/automated-delivery"
         ]
       }
     ]

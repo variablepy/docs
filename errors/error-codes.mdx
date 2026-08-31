@@ -30,7 +30,7 @@ The `error` field is a stable, machine-readable code. Match on this field in you
 | `NETWORK_ERROR` | A network, SSL, TLS, or connection error occurred. |
 | `SITE_CONFIG_FAILED` | The target site's captcha configuration could not be retrieved or processed. |
 | `BAD_REQUEST` | The solve request was considered invalid internally. |
-| `BAD_TASK_TYPE` | The supplied task type is unsupported during result processing. |
+| `BAD_TASK_TYPE` | The supplied task type is unsupported. Returned with `errorId: 2`. |
 
 ## Handling failures
 

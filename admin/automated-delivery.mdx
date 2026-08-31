@@ -1,0 +1,52 @@
+---
+title: "Automated Key Delivery"
+description: "Sellauth webhook that automatically provisions API keys after purchase."
+sidebarTitle: "Automated Delivery"
+---
+
+```http
+GET/POST https://api.hydrosolves.gay/automated/createKey
+```
+
+This endpoint is the Sellauth delivery webhook. It automatically provisions or credits API keys when a customer completes a purchase at [`hydrosolves.mysellauth.com`](https://hydrosolves.mysellauth.com/). Customers do not call this endpoint directly.
+
+## GET
+
+A `GET` request returns a simple health/status text response. It is intended for endpoint monitoring.
+
+## POST
+
+Sellauth sends a `POST` request when an order is delivered. The request must include the `X-Signature` header, which is an HMAC-SHA256 signature of the request body calculated with the configured Sellauth secret. Requests with a missing or invalid signature are rejected.
+
+Only events of type `INVOICE.ITEM.DELIVER-DYNAMIC` that are marked as **completed** are processed. All other event types are ignored.
+
+## Behavior
+
+When a valid, completed delivery event is received, the endpoint:
+
+<Steps>
+  <Step title="Receives the order">
+    Parses the completed Sellauth delivery payload.
+  </Step>
+  <Step title="Extracts the customer email">
+    Reads the customer email from the payload.
+  </Step>
+  <Step title="Determines the purchased amount">
+    Determines the number of solves purchased from the order item.
+  </Step>
+  <Step title="Creates or credits a key">
+    If the email has no existing API key, a new key is created with the purchased balance. If a key already exists for the email, the purchased balance is added to it.
+  </Step>
+  <Step title="Stores delivery information">
+    Persists the delivery record so the same Sellauth event is not processed twice.
+  </Step>
+  <Step title="Emails the key">
+    Sends the API key to the customer's email.
+  </Step>
+</Steps>
+
+## Security
+
+<Warning>
+  API keys are linked to the customer's email. Do not share your API key. If you believe your key has been compromised, contact HydroSolve support and rotate the key.
+</Warning>
