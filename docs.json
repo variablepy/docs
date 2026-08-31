@@ -81,16 +81,6 @@
           "guides/result-retention",
           "guides/security"
         ]
-      },
-      {
-        "group": "Admin API",
-        "icon": "shield-halved",
-        "pages": [
-          "admin/overview",
-          "admin/create-key",
-          "admin/add-balance",
-          "admin/automated-delivery"
-        ]
       }
     ]
   },
