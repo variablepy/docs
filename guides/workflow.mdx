@@ -3,65 +3,54 @@ title: "API Workflow"
 description: "End-to-end HydroSolve workflow."
 ---
 
-Every HydroSolve integration follows the same six-step workflow.
+# API Workflow
 
-<Steps>
-  <Step title="Get an API key">
-    Purchase or obtain an API key from the official store at [`hydrosolves.mysellauth.com`](https://hydrosolves.mysellauth.com/).
-  </Step>
-  <Step title="Submit a task">
-    `POST https://api.hydrosolves.gay/createTask` with your API key and challenge parameters. See [Create Task](/endpoints/create-task).
-  </Step>
-  <Step title="Save the task ID">
-    The API responds with `{ "status": "queued", "task_id": "..." }`. Store the `task_id`.
-  </Step>
-  <Step title="Poll for the result">
-    `GET https://api.hydrosolves.gay/getResult/{task_id}` until `status` is `solved` or `failed`. See [Get Result](/endpoints/get-result).
-  </Step>
-  <Step title="Read the token">
-    On success, read the token from `solution.token` and submit it to the target site.
-  </Step>
-  <Step title="Check your balance">
-    `POST https://api.hydrosolves.gay/getBalance` at any time to see remaining balance. See [Get Balance](/endpoints/get-balance).
-  </Step>
-</Steps>
+## Overview
 
-## Full example
+HydroSolve uses an asynchronous task-based workflow:
 
-```python
-import time, requests
+```text
+createTask → getTaskResult (poll) → use token
+```
 
-BASE = "https://api.hydrosolves.gay"
-KEY  = "YOUR_API_KEY"
+## Step 1: Create Task
 
-# 1. Submit
-res = requests.post(f"{BASE}/createTask", json={
-    "key": KEY,
+```bash
+curl -X POST https://api.hydrosolves.gay/createTask \
+  -H "Content-Type: application/json" \
+  -H "apikey: hydrosolves-xxxxxxxx" \
+  -d '{
     "type": "HCaptchaCaptchaToken",
     "task": {
-        "sitekey": "HCAPTCHA_SITEKEY",
-        "siteurl": "https://example.com",
-        "proxy": "http://username:password@host:port",
-        "user_agent": "Mozilla/5.0 ...",
-    },
-}).json()
-task_id = res["task_id"]
-
-# 2. Poll
-while True:
-    r = requests.get(f"{BASE}/getResult/{task_id}").json()
-    if r["status"] in ("solved", "failed"):
-        break
-    time.sleep(2)
-
-# 3. Use the token
-if r["status"] == "solved":
-    token = r["solution"]["token"]
-    print("Solved:", token)
-else:
-    print("Failed:", r["error"])
-
-# 4. Check balance
-bal = requests.post(f"{BASE}/getBalance", json={"key": KEY}).json()
-print("Balance:", bal["balance"])
+      "sitekey": "10000000-ffff-ffff-ffff-000000000001",
+      "siteurl": "https://example.com",
+      "proxy": "http://user:pass@host:port",
+      "user_agent": "Mozilla/5.0 ..."
+    }
+  }'
 ```
+
+Response:
+
+```json
+{ "status": "queued", "task_id": "1722000000000" }
+```
+
+## Step 2: Poll for Result
+
+```bash
+curl "https://api.hydrosolves.gay/getTaskResult?taskid=1722000000000&apikey=hydrosolves-xxxxxxxx"
+```
+
+Keep polling until `status` is `solved` or `failed`.
+
+## Step 3: Use the Token
+
+The `token` field in the solved response contains the captcha token or cookie. Inject it into your request to the target site.
+
+## Polling Tips
+
+- Poll every 1-3 seconds
+- Most tasks complete in 10-30 seconds
+- DataDome completes in under 1 second
+- Results expire after 5 minutes

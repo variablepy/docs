@@ -3,46 +3,32 @@ title: "Pricing"
 description: "How HydroSolve charges tasks across every supported captcha type."
 ---
 
-HydroSolve reports pricing in two different places. It is important to distinguish between them.
+# Pricing
 
-## Per-solve pricing
+Each task type has a fixed per-solve price. Charges are deducted from your account balance when a task is created.
 
-Every completed solve reports its cost in the `cost` field returned by [`/getResult`](/endpoints/get-result). Prices are in USD.
+## Prices
 
-| Task type | Price per solve |
+| Task Type | Price / Solve |
 | --- | --- |
-| `HCaptchaCaptchaToken` | `$0.00075` |
-| `HCaptchaEnterpriseToken` | `$0.00150` |
-| `TurnstileCaptcha` | `$0.00060` |
-| `TurnstileCaptchaProxyless` | `$0.00060` |
-| `AWSWafToken` | `$0.00100` |
-| `AWSWafTokenProxyless` | `$0.00100` |
-| `DataDomeTagsCookie` | `$0.00100` |
+| `HCaptchaCaptchaToken` | \$0.0015 |
+| `HCaptchaEnterpriseToken` | \$0.0015 |
+| `TurnstileCaptcha` | \$0.0006 |
+| `TurnstileCaptchaProxyless` | \$0.0006 |
+| `CloudflareJsdCookie` | \$0.0008 |
+| `AWSWafToken` | \$0.001 |
+| `AWSWafTokenProxyless` | \$0.001 |
+| `KasadaCtToken` | \$0.0008 |
+| `DataDomeTagsCookie` | \$0.001 |
 
-## Balance deducted when creating a task
+## How Charging Works
 
-When you submit a task to [`/createTask`](/endpoints/create-task), HydroSolve deducts an amount from your balance based on the task shape:
+1. You submit a task via `/createTask`
+2. Your balance is deducted immediately
+3. If the task fails, the charge is **not** refunded
 
-| Condition | Balance deducted |
-| --- | --- |
-| Base task | `0.5` solve |
-| hCaptcha task includes `rqdata` | `1.0` solve |
-| Task type contains `enterprise` (`HCaptchaEnterprise`) | `1.0` solve |
+## Check Balance
 
-<Warning>
-  The `cost` field returned by `/getResult` and the balance deducted at `/createTask` are two independent values. Do not treat them as interchangeable.
-</Warning>
-
-## Balance conversion
-
-Your balance is stored in solves and reported in USD by [`/getBalance`](/endpoints/get-balance) using:
-
-```text
-1 solve = $0.0015
+```bash
+curl "https://api.hydrosolves.gay/getBalance?apikey=hydrosolves-xxxxxxxx"
 ```
-
-## Buy an API key
-
-<Card title="Purchase API Balance" icon="key" href="https://hydrosolves.mysellauth.com/">
-  Buy an API key or top up your balance at `hydrosolves.mysellauth.com`.
-</Card>

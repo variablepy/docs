@@ -3,120 +3,60 @@ title: "AWS WAF"
 description: "Solve AWS WAF challenges through your proxy."
 ---
 
-`AWSWafToken` solves AWS WAF challenges using a proxy you supply.
+# AWS WAF
 
-## Requirements
+Solve AWS WAF challenges and retrieve the challenge token.
 
-| Field | Required |
-| --- | --- |
-| API key | Yes |
-| `siteurl` | Yes |
-| `proxy` | Yes |
-| `user_agent` | Optional (accepted but not required) |
+## Task Types
 
-<Note>
-  AWS WAF does not require `sitekey`. Use `siteurl` and the AWS WAF-specific challenge parameters below.
-</Note>
+- `AWSWafToken` — with proxy (required)
+- `AWSWafTokenProxyless` — without proxy
 
-## AWS WAF task parameters
+## Parameters
 
-Supply these fields inside the `task` object when the target challenge requires them. Use the exact JSON casing shown.
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `siteurl` | string | Yes | Page URL with the AWS WAF challenge |
+| `proxy` | string | Conditional | Required for `AWSWafToken` |
+| `user_agent` | string | No | Browser user agent |
+| `awsKey` | string | No | AWS challenge key |
+| `awsIv` | string | No | AWS initialization vector |
+| `awsContext` | string | No | AWS challenge context |
+| `awsChallengeJS` | string | No | AWS challenge JS URL |
+| `awsApiJs` | string | No | AWS API JS URL |
+| `awsProblemUrl` | string | No | AWS problem URL |
+| `awsApiKey` | string | No | AWS API key |
+| `awsExistingToken` | string | No | Existing token to refresh |
 
-| Field | Description |
-| --- | --- |
-| `awsKey` | AWS WAF challenge key. |
-| `awsIv` | AWS WAF initialization vector. |
-| `awsContext` | AWS WAF challenge context. |
-| `awsChallengeJS` | URL of the AWS WAF challenge JavaScript. |
-| `awsApiJs` | URL of the AWS WAF API JavaScript. |
-| `awsProblemUrl` | AWS WAF problem URL. |
-| `awsApiKey` | AWS WAF API key from the challenge page. |
-| `awsExistingToken` | Existing AWS WAF token, when refreshing. |
-
-## Request
+## Request — With Proxy
 
 ```json
 {
-  "key": "YOUR_API_KEY",
   "type": "AWSWafToken",
   "task": {
     "siteurl": "https://example.com",
-    "proxy": "http://username:password@host:port",
-    "user_agent": "Mozilla/5.0 ...",
-    "awsKey": "AWS_KEY",
-    "awsIv": "AWS_IV",
-    "awsContext": "AWS_CONTEXT",
-    "awsChallengeJS": "https://.../challenge.js",
-    "awsApiJs": "https://.../api.js",
-    "awsProblemUrl": "https://.../problem",
-    "awsApiKey": "AWS_API_KEY"
+    "proxy": "http://user:pass@host:port",
+    "awsKey": "optional-aws-key",
+    "awsContext": "optional-context"
   }
 }
 ```
 
-## Examples
-
-<CodeGroup>
-
-```bash cURL
-curl -X POST https://api.hydrosolves.gay/createTask \
-  -H "Content-Type: application/json" \
-  -d '{
-    "key": "YOUR_API_KEY",
-    "type": "AWSWafToken",
-    "task": {
-      "siteurl": "https://example.com",
-      "proxy": "http://username:password@host:port"
-    }
-  }'
-```
-
-```python Python
-import requests
-
-res = requests.post(
-    "https://api.hydrosolves.gay/createTask",
-    json={
-        "key": "YOUR_API_KEY",
-        "type": "AWSWafToken",
-        "task": {
-            "siteurl": "https://example.com",
-            "proxy": "http://username:password@host:port",
-        },
-    },
-)
-print(res.json())
-```
-
-```javascript JavaScript
-const res = await fetch("https://api.hydrosolves.gay/createTask", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    key: "YOUR_API_KEY",
-    type: "AWSWafToken",
-    task: {
-      siteurl: "https://example.com",
-      proxy: "http://username:password@host:port",
-    },
-  }),
-});
-console.log(await res.json());
-```
-
-</CodeGroup>
-
-## Successful result
+## Request — Proxyless
 
 ```json
 {
-  "status": "solved",
-  "cost": "$0.00100",
-  "solution": {
-    "token": "AWS_WAF_TOKEN",
-    "user_agent": "Mozilla/5.0 ..."
+  "type": "AWSWafTokenProxyless",
+  "task": {
+    "siteurl": "https://example.com"
   }
 }
 ```
 
-The reported `cost` is `$0.00100`.
+## Price
+
+\$0.001 per solve.
+
+## Response Token
+
+The `token` field contains the solved AWS WAF token.

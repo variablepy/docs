@@ -3,106 +3,51 @@ title: "DataDome"
 description: "Solve DataDome challenges and retrieve the DataDome cookie."
 ---
 
-`DataDomeTagsCookie` solves DataDome challenges and returns the DataDome cookie token. The solver internally uses the DataDome tags solver.
+# DataDome Tags Cookie
 
-## Requirements
+Solve DataDome bot protection challenges and retrieve the `datadome` cookie.
 
-| Field | Required |
-| --- | --- |
-| API key | Yes |
-| `siteurl` | Yes |
-| `sitekey` | Yes |
-| `proxy` | Yes |
-| `user_agent` | Yes |
+## Task Type
 
-<Note>
-  For `DataDomeTagsCookie`, the `sitekey` field carries the DataDome JS URL (the DDJS key input) required by the tags solver.
-</Note>
+`DataDomeTagsCookie`
+
+## Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `siteurl` | string | Yes | Page URL protected by DataDome |
+| `datadomejsurl` | string | Yes | URL of the DataDome tags.js script |
+| `ddjskey` | string | Yes | DataDome JavaScript key |
+| `ddoptions` | object | Yes | DataDome options object |
+| `proxy` | string | Yes | `http://host:port:user:pass` |
+| `user_agent` | string | No | Browser user agent |
 
 ## Request
 
 ```json
 {
-  "key": "YOUR_API_KEY",
   "type": "DataDomeTagsCookie",
   "task": {
-    "siteurl": "https://example.com",
-    "sitekey": "https://ct.datadome.co/.../tags.js",
-    "proxy": "http://username:password@host:port",
-    "user_agent": "Mozilla/5.0 ..."
+    "siteurl": "https://connect.ubisoft.com/login",
+    "datadomejsurl": "https://static-security.ubisoft.com/tags.js",
+    "ddjskey": "88F341A1D9D736E8B9493BCD3B489D",
+    "ddoptions": {
+      "ajaxListenerPath": true,
+      "allowHtmlContentTypeOnCaptcha": true
+    },
+    "proxy": "http://user:pass@host:port"
   }
 }
 ```
 
-## Examples
+## Price
 
-<CodeGroup>
+\$0.001 per solve.
 
-```bash cURL
-curl -X POST https://api.hydrosolves.gay/createTask \
-  -H "Content-Type: application/json" \
-  -d '{
-    "key": "YOUR_API_KEY",
-    "type": "DataDomeTagsCookie",
-    "task": {
-      "siteurl": "https://example.com",
-      "sitekey": "https://ct.datadome.co/.../tags.js",
-      "proxy": "http://username:password@host:port",
-      "user_agent": "Mozilla/5.0 ..."
-    }
-  }'
-```
+## Response
 
-```python Python
-import requests
+The `token` field contains the `datadome` cookie value.
 
-res = requests.post(
-    "https://api.hydrosolves.gay/createTask",
-    json={
-        "key": "YOUR_API_KEY",
-        "type": "DataDomeTagsCookie",
-        "task": {
-            "siteurl": "https://example.com",
-            "sitekey": "https://ct.datadome.co/.../tags.js",
-            "proxy": "http://username:password@host:port",
-            "user_agent": "Mozilla/5.0 ...",
-        },
-    },
-)
-print(res.json())
-```
+## Notes
 
-```javascript JavaScript
-const res = await fetch("https://api.hydrosolves.gay/createTask", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    key: "YOUR_API_KEY",
-    type: "DataDomeTagsCookie",
-    task: {
-      siteurl: "https://example.com",
-      sitekey: "https://ct.datadome.co/.../tags.js",
-      proxy: "http://username:password@host:port",
-      user_agent: "Mozilla/5.0 ...",
-    },
-  }),
-});
-console.log(await res.json());
-```
-
-</CodeGroup>
-
-## Successful result
-
-```json
-{
-  "status": "solved",
-  "cost": "$0.00100",
-  "solution": {
-    "token": "DATADOME_COOKIE",
-    "user_agent": "Mozilla/5.0 ..."
-  }
-}
-```
-
-The reported `cost` is `$0.00100`.
+This solver uses a direct API call approach — no browser is launched. Average solve time is under 1 second.
