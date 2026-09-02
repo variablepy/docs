@@ -3,116 +3,53 @@ title: "Cloudflare Turnstile"
 description: "Solve Cloudflare Turnstile challenges through your proxy."
 ---
 
-`TurnstileCaptcha` solves Cloudflare Turnstile challenges using a proxy you supply.
+# Cloudflare Turnstile
 
-## Requirements
+Solve Cloudflare Turnstile challenges through your proxy.
 
-| Field | Required |
-| --- | --- |
-| API key | Yes |
-| `sitekey` | Yes |
-| `siteurl` | Yes |
-| `proxy` | Yes |
-| `user_agent` | Optional (accepted but not required) |
-| `pageaction` | Optional |
-| `data` | Optional |
-| `pagedata` | Optional |
+## Task Types
 
-## Request
+- `TurnstileCaptcha` — with proxy (required)
+- `TurnstileCaptchaProxyless` — without proxy
+
+## Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `sitekey` | string | Yes | Turnstile site key |
+| `siteurl` | string | Yes | Page URL with the captcha |
+| `proxy` | string | Conditional | Required for `TurnstileCaptcha` |
+| `user_agent` | string | No | Browser user agent |
+
+## Request — With Proxy
 
 ```json
 {
-  "key": "YOUR_API_KEY",
   "type": "TurnstileCaptcha",
   "task": {
-    "sitekey": "TURNSTILE_SITEKEY",
-    "siteurl": "https://example.com",
-    "proxy": "http://username:password@host:port",
-    "user_agent": "Mozilla/5.0 ...",
-    "pageaction": "",
-    "data": "",
-    "pagedata": ""
+    "sitekey": "0x4AAAAAAADnPIDROrmt1Wwj",
+    "siteurl": "https://example.com/login",
+    "proxy": "http://user:pass@host:port"
   }
 }
 ```
 
-## Turnstile parameters
-
-Only send these when the target Turnstile challenge requires them. Leaving them out is fine for most sites.
-
-| Field | Aliases | Description |
-| --- | --- | --- |
-| `pageaction` | `pageaction`, `pageAction` | Turnstile `pageaction` value. |
-| `data` | `data` | Turnstile `data` value. |
-| `pagedata` | `pagedata`, `pageData`, `chlPageData` | Turnstile `pagedata` value. |
-
-## Examples
-
-<CodeGroup>
-
-```bash cURL
-curl -X POST https://api.hydrosolves.gay/createTask \
-  -H "Content-Type: application/json" \
-  -d '{
-    "key": "YOUR_API_KEY",
-    "type": "TurnstileCaptcha",
-    "task": {
-      "sitekey": "TURNSTILE_SITEKEY",
-      "siteurl": "https://example.com",
-      "proxy": "http://username:password@host:port"
-    }
-  }'
-```
-
-```python Python
-import requests
-
-res = requests.post(
-    "https://api.hydrosolves.gay/createTask",
-    json={
-        "key": "YOUR_API_KEY",
-        "type": "TurnstileCaptcha",
-        "task": {
-            "sitekey": "TURNSTILE_SITEKEY",
-            "siteurl": "https://example.com",
-            "proxy": "http://username:password@host:port",
-        },
-    },
-)
-print(res.json())
-```
-
-```javascript JavaScript
-const res = await fetch("https://api.hydrosolves.gay/createTask", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    key: "YOUR_API_KEY",
-    type: "TurnstileCaptcha",
-    task: {
-      sitekey: "TURNSTILE_SITEKEY",
-      siteurl: "https://example.com",
-      proxy: "http://username:password@host:port",
-    },
-  }),
-});
-console.log(await res.json());
-```
-
-</CodeGroup>
-
-## Successful result
+## Request — Proxyless
 
 ```json
 {
-  "status": "solved",
-  "cost": "$0.00060",
-  "solution": {
-    "token": "TURNSTILE_TOKEN",
-    "user_agent": "Mozilla/5.0 ...",
-    "supressed": false
+  "type": "TurnstileCaptchaProxyless",
+  "task": {
+    "sitekey": "0x4AAAAAAADnPIDROrmt1Wwj",
+    "siteurl": "https://example.com/login"
   }
 }
 ```
 
-Turnstile results additionally return the `user_agent` used by the solver.
+## Price
+
+\$0.0006 per solve.
+
+## Response Token
+
+The `token` field contains the Turnstile `cf-turnstile-response` token.

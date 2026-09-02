@@ -3,10 +3,18 @@ title: "Result Retention"
 description: "How long HydroSolve stores task results."
 ---
 
-Task results are retained for approximately **300 seconds** after the task completes. After the retention window elapses, the result is no longer available from [`/getResult`](/endpoints/get-result).
+# Result Retention
 
-## Recommendations
+Task results are stored for **5 minutes** after solving.
 
-- Poll `/getResult/{task_id}` on a short interval (1 to 3 seconds) after submitting a task.
-- Persist the token in your own system as soon as you retrieve it. HydroSolve is not a durable store.
-- If your workflow can tolerate delay, ensure your polling loop runs within the 300-second window.
+After that, the result is cleaned up and `getTaskResult` will return `UNKNOWN_TASK`.
+
+## What This Means
+
+- You have 5 minutes to poll and retrieve your solved token
+- After 5 minutes, the task ID is no longer valid
+- If you need the same captcha solved again, create a new task
+
+## Recommendation
+
+Poll every 1-3 seconds. Most tasks complete well within the 5-minute window.

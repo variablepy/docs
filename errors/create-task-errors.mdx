@@ -3,127 +3,43 @@ title: "Create Task Errors"
 description: "Every error returned by /createTask."
 ---
 
-[`/createTask`](/endpoints/create-task) returns the following error responses. Every error body has the shape:
+# Create Task Errors
+
+Errors returned synchronously by `POST /createTask` before the task is queued.
+
+## 400 — Bad Request
+
+| Message | Meaning |
+| --- | --- |
+| `Missing API key` | No `apikey` header provided |
+| `Missing siteurl` | `siteurl` is required for all task types |
+| `Missing sitekey` | `sitekey` required for hCaptcha and Turnstile |
+| `Missing proxy` | Proxy required for this task type |
+| `Missing datadomejsurl` | DataDome `datadomejsurl` is required |
+| `Missing ddjskey` | DataDome `ddjskey` is required |
+| `Missing ddoptions` | DataDome `ddoptions` is required |
+
+## 401 — Unauthorized
+
+| Message | Meaning |
+| --- | --- |
+| `Missing API key` | No apikey header provided |
+
+## 402 — Insufficient Balance
+
+Your account balance is too low to solve this task type. Check your balance with `/getBalance`.
+
+## 403 — Forbidden
+
+| Message | Meaning |
+| --- | --- |
+| `Invalid API key` | API key not found in the database |
+
+## Example Error Response
 
 ```json
 {
   "status": "error",
-  "message": "..."
+  "message": "Missing sitekey"
 }
 ```
-
-Which validation errors can be returned depends on the task type you submit.
-
-| HTTP | Message | When |
-| --- | --- | --- |
-| 401 | `Missing API key` | Request body has no `key` or `clientKey`. |
-| 400 | `Missing siteurl` | The task requires `siteurl` and none was supplied. |
-| 400 | `Missing sitekey` | The task requires `sitekey` and none was supplied. |
-| 400 | `Missing proxy` | The task requires a proxy and none was supplied. |
-| 400 | `Missing user_agent` | The task requires a user agent and none was supplied. |
-| 403 | `Invalid API key` | The supplied API key is not registered or is disabled. |
-| 402 | `Insufficient balance` | The account balance is too low to charge the task. |
-
-## Missing API key
-
-```http
-HTTP/1.1 401
-```
-
-```json
-{
-  "status": "error",
-  "message": "Missing API key"
-}
-```
-
-The request body did not include `key` (or its alias `clientKey`).
-
-## Missing sitekey or siteurl
-
-```http
-HTTP/1.1 400
-```
-
-```json
-{
-  "status": "error",
-  "message": "Missing sitekey or siteurl"
-}
-```
-
-The task object did not include a required `sitekey` or `siteurl` (or their aliases `websiteKey` and `websiteURL`).
-
-Which fields are required depends on the task type:
-
-- hCaptcha and Turnstile tasks require both `sitekey` and `siteurl`.
-- `DataDomeTagsCookie` requires `sitekey` (the DataDome JS URL) and `siteurl`.
-- AWS WAF tasks require only `siteurl`.
-
-## Missing proxy
-
-```http
-HTTP/1.1 400
-```
-
-```json
-{
-  "status": "error",
-  "message": "Missing proxy"
-}
-```
-
-The task requires a proxy and none was supplied.
-
-<Note>
-  This error does **not** apply to [`TurnstileCaptchaProxyless`](/task-types/turnstile-proxyless) or [`AWSWafTokenProxyless`](/task-types/aws-waf-proxyless), which do not require a proxy.
-</Note>
-
-## Missing user\_agent
-
-```http
-HTTP/1.1 400
-```
-
-```json
-{
-  "status": "error",
-  "message": "Missing user_agent"
-}
-```
-
-A task that requires a user agent was submitted without one.
-
-<Note>
-  This error applies to `HCaptchaCaptchaToken`, `HCaptchaEnterpriseToken`, and `DataDomeTagsCookie`. Turnstile and AWS WAF tasks accept `user_agent` but do not require it.
-</Note>
-
-## Invalid API key
-
-```http
-HTTP/1.1 403
-```
-
-```json
-{
-  "status": "error",
-  "message": "Invalid API key"
-}
-```
-
-The supplied API key does not exist, is disabled, or is malformed.
-
-## Insufficient balance
-
-```http
-HTTP/1.1 402
-```
-
-```json
-{
-  "status": "error",
-  "message": "Insufficient balance"
-}
-```
-
-Your account does not have enough balance to charge the task. See [Pricing](/guides/pricing) for how much each task costs.
