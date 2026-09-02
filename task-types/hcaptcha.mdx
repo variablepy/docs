@@ -3,125 +3,59 @@ title: "hCaptcha"
 description: "Solve standard hCaptcha challenges."
 ---
 
-`HCaptchaCaptchaToken` is the default task type. Use it to solve standard hCaptcha challenges.
+# hCaptcha
 
-## Requirements
+Solve hCaptcha and hCaptcha Enterprise challenges and receive a verification token.
 
-| Field | Required |
-| --- | --- |
-| API key | Yes |
-| `sitekey` | Yes |
-| `siteurl` | Yes |
-| `proxy` | Yes |
-| `user_agent` | Yes |
-| `rqdata` | Optional |
+## Task Types
 
-The API rejects hCaptcha tasks without a proxy or without a user agent.
+- `HCaptchaCaptchaToken` — standard hCaptcha
+- `HCaptchaEnterpriseToken` — hCaptcha Enterprise
 
-## Request
+Both types share the same parameters and behavior.
+
+## Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `sitekey` | string | Yes | hCaptcha site key |
+| `siteurl` | string | Yes | Page URL with the captcha |
+| `proxy` | string | Yes | `http://host:port:user:pass` |
+| `user_agent` | string | Yes | Browser user agent |
+| `rqdata` | string | No | Request data from the page |
+
+## Request — Standard
 
 ```json
 {
-  "key": "YOUR_API_KEY",
   "type": "HCaptchaCaptchaToken",
   "task": {
-    "sitekey": "HCAPTCHA_SITEKEY",
-    "siteurl": "https://example.com",
-    "rqdata": "",
-    "proxy": "http://username:password@host:port",
-    "user_agent": "Mozilla/5.0 ..."
+    "sitekey": "10000000-ffff-ffff-ffff-000000000001",
+    "siteurl": "https://example.com/login",
+    "proxy": "http://user:pass@host:port",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36"
   }
 }
 ```
 
-## Examples
-
-<CodeGroup>
-
-```bash cURL
-curl -X POST https://api.hydrosolves.gay/createTask \
-  -H "Content-Type: application/json" \
-  -d '{
-    "key": "YOUR_API_KEY",
-    "type": "HCaptchaCaptchaToken",
-    "task": {
-      "sitekey": "HCAPTCHA_SITEKEY",
-      "siteurl": "https://example.com",
-      "proxy": "http://username:password@host:port",
-      "user_agent": "Mozilla/5.0 ..."
-    }
-  }'
-```
-
-```python Python
-import requests
-
-res = requests.post(
-    "https://api.hydrosolves.gay/createTask",
-    json={
-        "key": "YOUR_API_KEY",
-        "type": "HCaptchaCaptchaToken",
-        "task": {
-            "sitekey": "HCAPTCHA_SITEKEY",
-            "siteurl": "https://example.com",
-            "proxy": "http://username:password@host:port",
-            "user_agent": "Mozilla/5.0 ...",
-        },
-    },
-)
-print(res.json())
-```
-
-```javascript JavaScript
-const res = await fetch("https://api.hydrosolves.gay/createTask", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    key: "YOUR_API_KEY",
-    type: "HCaptchaCaptchaToken",
-    task: {
-      sitekey: "HCAPTCHA_SITEKEY",
-      siteurl: "https://example.com",
-      proxy: "http://username:password@host:port",
-      user_agent: "Mozilla/5.0 ...",
-    },
-  }),
-});
-console.log(await res.json());
-```
-
-</CodeGroup>
-
-## With rqdata
-
-Supply `rqdata` when the target hCaptcha requires it. Providing `rqdata` changes the create-task balance deduction to `1.0`.
+## Request — Enterprise
 
 ```json
 {
-  "key": "YOUR_API_KEY",
-  "type": "HCaptchaCaptchaToken",
+  "type": "HCaptchaEnterpriseToken",
   "task": {
-    "sitekey": "HCAPTCHA_SITEKEY",
-    "siteurl": "https://example.com",
-    "rqdata": "RQDATA_VALUE",
-    "proxy": "http://username:password@host:port",
-    "user_agent": "Mozilla/5.0 ..."
+    "sitekey": "10000000-ffff-ffff-ffff-000000000001",
+    "siteurl": "https://example.com/login",
+    "proxy": "http://user:pass@host:port",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36"
   }
 }
 ```
 
-## Successful result
+## Price
 
-```json
-{
-  "status": "solved",
-  "cost": "$0.00075",
-  "solution": {
-    "token": "HCAPTCHA_TOKEN",
-    "user_agent": "Mozilla/5.0 ...",
-    "supressed": false
-  }
-}
-```
+\$0.0015 per solve.
 
-The reported `cost` is `$0.00075`. See [Pricing](/guides/pricing) for how balance deduction relates to `cost`.
+## Response Token
+
+The `token` field contains the `P0_eyJ...` hCaptcha verification token.

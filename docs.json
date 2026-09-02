@@ -38,8 +38,7 @@
         "pages": [
           "index",
           "quickstart",
-          "authentication",
-          "official-links"
+          "authentication"
         ]
       },
       {
@@ -56,11 +55,8 @@
         "icon": "list-check",
         "pages": [
           "task-types/hcaptcha",
-          "task-types/hcaptcha-enterprise",
           "task-types/turnstile",
-          "task-types/turnstile-proxyless",
           "task-types/aws-waf",
-          "task-types/aws-waf-proxyless",
           "task-types/datadome"
         ]
       },

@@ -3,56 +3,24 @@ title: "Authentication"
 description: "How to authenticate requests to the HydroSolve API."
 ---
 
-HydroSolve authenticates every request using an **API key** supplied in the JSON body of the request. There are no authentication headers and no Bearer tokens.
+# Authentication
 
-## Canonical format
+All requests require an API key passed via the `apikey` header.
 
-Include your API key as the `key` field in the JSON body:
-
-```json
-{
-  "key": "YOUR_API_KEY"
-}
+```bash
+-H "apikey: hydrosolves-xxxxxxxx"
 ```
 
-## Aliases
+Keys are issued by the admin. Each key has a prepaid balance. Tasks deduct from your balance on creation.
 
-The [`/createTask`](/endpoints/create-task) endpoint also accepts `clientKey` as an alias for `key`. Both fields behave identically.
+## Balance Check
 
-```json
-{
-  "clientKey": "YOUR_API_KEY"
-}
+```bash
+curl "https://api.hydrosolves.gay/getBalance?apikey=hydrosolves-xxxxxxxx"
 ```
 
-All other endpoints use `key`.
+Returns:
 
-## Where to get an API key
-
-API keys are sold through the official HydroSolve store:
-
-<Card title="Get an API Key" icon="key" href="https://hydrosolves.mysellauth.com/">
-  Purchase an API key from `hydrosolves.mysellauth.com`.
-</Card>
-
-## Keep your API key private
-
-<Warning>
-  Treat your API key like a password.
-
-  - Never commit API keys to version control.
-  - Never expose API keys in client-side code shipped to browsers or mobile apps.
-  - Never send API keys through URL query parameters.
-  - Store API keys in environment variables or a secret manager.
-</Warning>
-
-Anyone with your API key can spend your balance.
-
-## Errors
-
-| HTTP | `message` | When it happens |
-| --- | --- | --- |
-| 401 | `Missing API key` | The request body does not include `key` (or `clientKey`). |
-| 403 | `Invalid API key` | The supplied key does not exist, is disabled, or is malformed. |
-
-See [Errors](/errors/create-task-errors) for the full list of API errors.
+```json
+{ "status": "success", "balance": 10.0 }
+```
