@@ -3,29 +3,22 @@ title: "Security & Privacy"
 description: "Best practices for handling your HydroSolve API key."
 ---
 
-Your API key is the only credential HydroSolve uses. Protect it accordingly.
+# Security & Privacy
 
-## Keep your API key private
+## API Key Safety
 
-<Warning>
-  Anyone with your API key can spend your balance.
-</Warning>
+- Never expose your API key in client-side code
+- Never commit API keys to version control
+- Use environment variables or secret managers
+- Rotate keys if you suspect a leak
 
-- **Do not** commit API keys to Git or any other version control system.
-- **Do not** embed API keys in client-side code (browser JavaScript, mobile apps, desktop binaries).
-- **Do not** send API keys through URL query parameters. Always use the JSON body.
-- **Do not** share API keys in screenshots, logs, error reports, or support tickets without redacting.
-- **Do** store API keys in environment variables, a secret manager, or an encrypted config store.
-- **Do** rotate keys if you suspect one has been exposed.
+## Proxy Safety
 
-## Where to send your key
+- Use authenticated proxies (`http://user:pass@host:port`)
+- Rotate proxies regularly to avoid bans
 
-Send the key in the JSON body of the request:
+## Data Handling
 
-```json
-{
-  "key": "YOUR_API_KEY"
-}
-```
-
-See [Authentication](/authentication) for full details.
+- Task parameters are processed and discarded
+- Only the solved token is returned and stored temporarily
+- Results auto-expire after 5 minutes
