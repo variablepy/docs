@@ -18,71 +18,7 @@
         ]
       }
     ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
-        },
-        {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
-        }
-      ]
-    },
-    "groups": [
-      {
-        "group": "Getting Started",
-        "pages": [
-          "index",
-          "quickstart",
-          "authentication",
-          "official-links"
-        ]
-      },
-      {
-        "group": "Endpoints",
-        "icon": "code",
-        "pages": [
-          "endpoints/create-task",
-          "endpoints/get-result",
-          "endpoints/get-balance"
-        ]
-      },
-      {
-        "group": "Task Types",
-        "icon": "list-check",
-        "pages": [
-          "task-types/hcaptcha",
-          "task-types/hcaptcha-enterprise",
-          "task-types/turnstile",
-          "task-types/turnstile-proxyless",
-          "task-types/aws-waf",
-          "task-types/aws-waf-proxyless",
-          "task-types/datadome"
-        ]
-      },
-      {
-        "group": "Errors",
-        "icon": "triangle-exclamation",
-        "pages": [
-          "errors/create-task-errors",
-          "errors/error-codes"
-        ]
-      },
-      {
-        "group": "Guides",
-        "icon": "book",
-        "pages": [
-          "guides/workflow",
-          "guides/pricing",
-          "guides/result-retention",
-          "guides/security"
-        ]
-      }
-    ]
+    "groups": []
   },
   "logo": {
     "light": "/logo/light.svg",
