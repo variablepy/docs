@@ -1,1 +1,39 @@
+---
+title: "Cloudflare JSD Cookie"
+description: "Solve Cloudflare JSD challenges and retrieve the cf_clearance cookie."
+---
 
+# Cloudflare JSD Cookie
+
+Solve Cloudflare JSD (JavaScript Detection) challenges and retrieve the `cf_clearance` cookie.
+
+## Task Type
+
+`CloudflareJsdCookie`
+
+## Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `siteurl` | string | Yes | Page URL protected by Cloudflare JSD |
+| `proxy` | string | Yes | `http://host:port:user:pass` |
+
+## Request
+
+```json
+{
+  "type": "CloudflareJsdCookie",
+  "task": {
+    "siteurl": "https://example.com",
+    "proxy": "http://user:pass@host:port"
+  }
+}
+```
+
+## Price
+
+\$0.0008 per solve.
+
+## Response
+
+The `token` field contains the full `cf_clearance` cookie string.

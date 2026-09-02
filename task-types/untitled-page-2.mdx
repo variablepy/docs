@@ -1,1 +1,48 @@
+---
+title: "Kasada CT Token"
+description: "Solve Kasada challenges and retrieve CT token."
+---
 
+# Kasada CT Token
+
+Solve Kasada bot protection challenges and retrieve a CT token.
+
+## Task Type
+
+`KasadaCtToken`
+
+## Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `siteurl` | string | Yes | Page URL protected by Kasada |
+| `proxy` | string | Yes | `http://host:port:user:pass` |
+| `pjspath` | string | Yes | Path to p.js (e.g. `/uuid1/uuid2/p.js`) |
+| `fphost` | string | Yes | Fingerprint host (e.g. `https://nike.com`) |
+| `tlhost` | string | Yes | TL endpoint host (e.g. `https://nike.com`) |
+| `user_agent` | string | No | Custom user agent |
+| `uaversion` | string | No | UA version override |
+| `cdconstant` | string | No | CD constant override |
+
+## Request
+
+```json
+{
+  "type": "KasadaCtToken",
+  "task": {
+    "siteurl": "https://nike.com/",
+    "proxy": "http://user:pass@host:port",
+    "pjspath": "/149e9513-01fa-4fb0-aad4-566afd725d1b/2d206a39-8ed7-437e-a3be-862e0f06eea3/p.js",
+    "fphost": "https://nike.com",
+    "tlhost": "https://nike.com"
+  }
+}
+```
+
+## Price
+
+\$0.0008 per solve.
+
+## Response
+
+The `token` field contains a JSON object with the Kasada CT token.
