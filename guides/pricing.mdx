@@ -5,11 +5,11 @@ description: "How HydroSolve charges tasks across every supported captcha type."
 
 # Pricing
 
-Each task type has a fixed per-solve price. Charges are deducted from your account balance when a task is created.
+Every task costs **1 credit** to solve. Credits are deducted from your account balance when a task is created.
 
-## Prices
+## USD Price Per Solve
 
-| Task Type | Price / Solve |
+| Task Type | USD / Solve |
 | --- | --- |
 | `HCaptchaCaptchaToken` | \$0.0015 |
 | `HCaptchaEnterpriseToken` | \$0.0015 |
@@ -24,7 +24,7 @@ Each task type has a fixed per-solve price. Charges are deducted from your accou
 ## How Charging Works
 
 1. You submit a task via `/createTask`
-2. Your balance is deducted immediately
+2. **1 credit** is deducted from your balance immediately
 3. If the task fails, the charge is **not** refunded
 
 ## Check Balance
