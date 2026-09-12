@@ -46,7 +46,7 @@
           "task-types/datadome",
           "task-types/cloudflare-jsd-cookie",
           "task-types/kasada-ct-token",
-          "task-types/untitled-page"
+          "task-types/recaptcha-v3"
         ]
       },
       {
