@@ -44,9 +44,9 @@
           "task-types/turnstile",
           "task-types/aws-waf",
           "task-types/datadome",
-          "task-types/kasada-ct-token",
           "task-types/cloudflare-jsd-cookie",
-          "task-types/kasada-ct-token"
+          "task-types/kasada-ct-token",
+          "untitled-page"
         ]
       },
       {
