@@ -11,28 +11,48 @@ When a task fails, the response includes an error string.
 
 | Error | Description |
 | --- | --- |
+| `SOLVE_FAILED` | Generic solve failure |
 | `SOLVE_TIMEOUT` | Task exceeded the time limit |
 | `EMPTY_TOKEN` | Solver returned an empty token |
-| `BAD_REQUEST` | Missing required parameters |
-| `HTTPCLOAK_MISSING` | httpcloak dependency not installed |
+| `MAX_ROUNDS` | Exceeded maximum retry rounds |
+| `EMPTY_RESPONSE` | Empty response from solver |
+| `BAD_RESPONSE` | Bad or malformed response |
+| `NO_CHALLENGE` | No challenge found |
+
+## Connection Errors
+
+| Error | Description |
+| --- | --- |
 | `PROXY_ERROR` | Proxy connection failed |
+| `PROXY_LIMITED` | Proxy rate-limited |
 | `NETWORK_ERROR` | Network/SSL/TLS connection error |
+| `BROWSER_FAILED` | Browser initialization failed |
+| `HTTPCLOAK_MISSING` | httpcloak dependency not installed |
 
 ## API Errors
 
 | Error | Description |
 | --- | --- |
+| `BAD_REQUEST` | Missing required parameters |
 | `NO_COOKIE` | No cookie/token was obtained |
-| `UNKNOWN_TASK` | Task ID not found |
-| `RESULT_EXPIRED` | Result has been cleaned up (5 min TTL) |
+| `BAD_TASK_TYPE` | Unknown task type |
 
-## Task-Type Specific
+## hCaptcha Specific
 
 | Error | Description |
 | --- | --- |
-| `HCAPTCHA_FAILED` | hCaptcha challenge failed |
-| `TURNSTILE_FAILED` | Turnstile challenge failed |
-| `AWSWAF_FAILED` | AWS WAF challenge failed |
-| `KASADA_FAILED` | Kasada challenge failed |
-| `TL_FAILED` | Kasada /tl endpoint request failed |
-| `API_ERROR_405` | DataDome API returned 405 |
+| `HSW_FAILED` | hCaptcha HSW challenge failed |
+| `CAPTCHA_FAILED` | Captcha recognition failed |
+| `CLICK_FAILED` | Click interaction failed |
+| `SITE_CONFIG_FAILED` | Failed to load site config |
+
+## reCAPTCHA v3 Specific
+
+| Error | Description |
+| --- | --- |
+| `ANCHOR_FAILED` | reCAPTCHA anchor request failed |
+| `RELOAD_FAILED` | reCAPTCHA reload request failed |
+| `TOKEN_PARSE_FAILED` | Failed to parse reCAPTCHA token from response |
+| `VERSION_RESOLVE_FAILED` | Failed to resolve reCAPTCHA version |
+| `FINGERPRINT_FAILED` | Failed to generate fingerprint |
+| `RECAPTCHA_V3_FAILED` | Generic reCAPTCHA v3 solve failure |

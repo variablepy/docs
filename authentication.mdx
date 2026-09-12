@@ -5,22 +5,30 @@ description: "How to authenticate requests to the HydroSolve API."
 
 # Authentication
 
-All requests require an API key passed via the `apikey` header.
+All requests require an API key passed in the JSON body as `key`.
 
-```bash
--H "apikey: hydrosolves-xxxxxxxx"
+```json
+{
+  "key": "hydrosolves-xxxxxxxx",
+  "type": "HCaptchaCaptchaToken",
+  "task": { ... }
+}
 ```
+
+Alternative field names `apikey` and `clientKey` are also accepted.
 
 Keys are issued by the admin. Each key has a prepaid balance. Tasks deduct from your balance on creation.
 
 ## Balance Check
 
 ```bash
-curl "https://api.hydrosolves.gay/getBalance?apikey=hydrosolves-xxxxxxxx"
+curl -X POST https://api.hydrosolves.gay/getBalance \
+  -H "Content-Type: application/json" \
+  -d '{"key": "hydrosolves-xxxxxxxx"}'
 ```
 
 Returns:
 
 ```json
-{ "status": "success", "balance": 10.0 }
+{ "status": "success", "balance": "$15.00" }
 ```

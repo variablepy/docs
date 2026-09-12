@@ -5,21 +5,21 @@ description: "Retrieve your remaining HydroSolve balance."
 
 # Get Balance
 
-`GET /getBalance?apikey=<key>`
+`POST /getBalance`
 
 Returns your current account balance.
 
-## Query Parameters
+## Request Body
 
-| Parameter | Type | Required | Description |
+| Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `apikey` | string | Yes | Your API key |
+| `key` | string | Yes | Your API key |
 
 ## Response
 
 ```json
 {
   "status": "success",
-  "balance": 10.0
+  "balance": "$15.00"
 }
 ```
