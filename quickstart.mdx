@@ -15,8 +15,8 @@ Contact the admin to receive your API key. Keys start with `hydrosolves-`.
 ```bash
 curl -X POST https://api.hydrosolves.gay/createTask \
   -H "Content-Type: application/json" \
-  -H "apikey: hydrosolves-xxxxxxxx" \
   -d '{
+    "key": "hydrosolves-xxxxxxxx",
     "type": "HCaptchaCaptchaToken",
     "task": {
       "sitekey": "10000000-ffff-ffff-ffff-000000000001",
@@ -36,7 +36,7 @@ Response:
 ## 3. Poll for Result
 
 ```bash
-curl "https://api.hydrosolves.gay/getTaskResult?taskid=1722000000000&apikey=hydrosolves-xxxxxxxx"
+curl "https://api.hydrosolves.gay/getResult?task_id=1722000000000"
 ```
 
 When solved:
@@ -44,20 +44,24 @@ When solved:
 ```json
 {
   "status": "solved",
-  "token": "P0_eyJ2IjoiMi...",
-  "tasktype": "HCaptchaCaptchaToken",
-  "useragent": "Mozilla/5.0 ..."
+  "cost": "$0.00150",
+  "solution": {
+    "token": "P0_eyJ2IjoiMi...",
+    "user_agent": "Mozilla/5.0 ..."
+  }
 }
 ```
 
-When still processing:
+When still solving:
 
 ```json
-{ "status": "processing" }
+{ "status": "solving" }
 ```
 
 ## 4. Check Balance
 
 ```bash
-curl "https://api.hydrosolves.gay/getBalance?apikey=hydrosolves-xxxxxxxx"
+curl -X POST https://api.hydrosolves.gay/getBalance \
+  -H "Content-Type: application/json" \
+  -d '{"key": "hydrosolves-xxxxxxxx"}'
 ```

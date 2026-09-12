@@ -9,17 +9,21 @@ Each task type has a fixed per-solve price. Charges are deducted from your accou
 
 ## Prices
 
-| Task Type | Price / Solve |
-| --- | --- |
-| `HCaptchaCaptchaToken` | \$0.0015 |
-| `HCaptchaEnterpriseToken` | \$0.0015 |
-| `TurnstileCaptcha` | \$0.0006 |
-| `TurnstileCaptchaProxyless` | \$0.0006 |
-| `CloudflareJsdCookie` | \$0.0008 |
-| `AWSWafToken` | \$0.001 |
-| `AWSWafTokenProxyless` | \$0.001 |
-| `KasadaCtToken` | \$0.0008 |
-| `DataDomeTagsCookie` | \$0.001 |
+| Task Type | Solves / Task | Price / Task |
+| --- | --- | --- |
+| `HCaptchaCaptchaToken` | 1 | \$0.0015 |
+| `HCaptchaEnterpriseToken` | 4 | \$0.006 |
+| `TurnstileCaptcha` | 1 | \$0.0015 |
+| `TurnstileCaptchaProxyless` | 1 | \$0.0015 |
+| `CloudflareJsdCookie` | 1 | \$0.0015 |
+| `AWSWafToken` | 1 | \$0.0015 |
+| `AWSWafTokenProxyless` | 1 | \$0.0015 |
+| `KasadaCtToken` | 1 | \$0.0015 |
+| `DataDomeTagsCookie` | 1 | \$0.0015 |
+| `ReCaptchaV3Token` | 1 | \$0.0015 |
+| `ReCaptchaV3TokenProxyLess` | 1 | \$0.0015 |
+| `ReCaptchaV3EnterpriseToken` | 4 | \$0.006 |
+| `ReCaptchaV3EnterpriseTokenProxyLess` | 4 | \$0.006 |
 
 ## How Charging Works
 
@@ -30,5 +34,7 @@ Each task type has a fixed per-solve price. Charges are deducted from your accou
 ## Check Balance
 
 ```bash
-curl "https://api.hydrosolves.gay/getBalance?apikey=hydrosolves-xxxxxxxx"
+curl -X POST https://api.hydrosolves.gay/getBalance \
+  -H "Content-Type: application/json" \
+  -d '{"key": "hydrosolves-xxxxxxxx"}'
 ```

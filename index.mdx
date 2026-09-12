@@ -17,23 +17,27 @@ https://api.hydrosolves.gay
 
 | Task Type | Price / Solve |
 | --- | --- |
-| `HCaptchaCaptchaToken` | \$0.0015 |
-| `HCaptchaEnterpriseToken` | \$0.0015 |
-| `TurnstileCaptcha` | \$0.0006 |
-| `TurnstileCaptchaProxyless` | \$0.0006 |
-| `CloudflareJsdCookie` | \$0.0008 |
-| `AWSWafToken` | \$0.001 |
-| `AWSWafTokenProxyless` | \$0.001 |
-| `KasadaCtToken` | \$0.0008 |
-| `DataDomeTagsCookie` | \$0.001 |
+| `HCaptchaCaptchaToken` | 1 solve (\$0.0015) |
+| `HCaptchaEnterpriseToken` | 4 solves (\$0.006) |
+| `TurnstileCaptcha` | 1 solve (\$0.0015) |
+| `TurnstileCaptchaProxyless` | 1 solve (\$0.0015) |
+| `CloudflareJsdCookie` | 1 solve (\$0.0015) |
+| `AWSWafToken` | 1 solve (\$0.0015) |
+| `AWSWafTokenProxyless` | 1 solve (\$0.0015) |
+| `KasadaCtToken` | 1 solve (\$0.0015) |
+| `DataDomeTagsCookie` | 1 solve (\$0.0015) |
+| `ReCaptchaV3Token` | 1 solve (\$0.0015) |
+| `ReCaptchaV3TokenProxyLess` | 1 solve (\$0.0015) |
+| `ReCaptchaV3EnterpriseToken` | 4 solves (\$0.006) |
+| `ReCaptchaV3EnterpriseTokenProxyLess` | 4 solves (\$0.006) |
 
 ## Quick Example
 
 ```bash
 curl -X POST https://api.hydrosolves.gay/createTask \
   -H "Content-Type: application/json" \
-  -H "apikey: hydrosolves-xxxxxxxx" \
   -d '{
+    "key": "hydrosolves-xxxxxxxx",
     "type": "HCaptchaCaptchaToken",
     "task": {
       "sitekey": "10000000-ffff-ffff-ffff-000000000001",
@@ -47,7 +51,7 @@ curl -X POST https://api.hydrosolves.gay/createTask \
 ## How It Works
 
 1. **Create a task** — `POST /createTask` with the task type and parameters
-2. **Poll for result** — `GET /getTaskResult?taskid=<id>&apikey=<key>`
+2. **Poll for result** — `GET /getResult?task_id=<id>`
 3. **Use the token** — inject the solved token into your site
 
 Most solves complete in under 60 seconds. DataDome solves in under 1 second.

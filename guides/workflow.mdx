@@ -8,7 +8,7 @@ description: "End-to-end HydroSolve workflow."
 ## Overview
 
 ```text
-createTask → getTaskResult (poll) → use token
+createTask → getResult (poll) → use token
 ```
 
 ## Step 1: Create Task
@@ -16,8 +16,8 @@ createTask → getTaskResult (poll) → use token
 ```bash
 curl -X POST https://api.hydrosolves.gay/createTask \
   -H "Content-Type: application/json" \
-  -H "apikey: hydrosolves-xxxxxxxx" \
   -d '{
+    "key": "hydrosolves-xxxxxxxx",
     "type": "HCaptchaCaptchaToken",
     "task": {
       "sitekey": "10000000-ffff-ffff-ffff-000000000001",
@@ -31,14 +31,14 @@ curl -X POST https://api.hydrosolves.gay/createTask \
 ## Step 2: Poll for Result
 
 ```bash
-curl "https://api.hydrosolves.gay/getTaskResult?taskid=1722000000000&apikey=hydrosolves-xxxxxxxx"
+curl "https://api.hydrosolves.gay/getResult?task_id=1722000000000"
 ```
 
 Keep polling until `status` is `solved` or `failed`.
 
 ## Step 3: Use the Token
 
-The `token` field in the solved response contains the captcha token or cookie. Inject it into your request to the target site.
+The `solution.token` field in the solved response contains the captcha token or cookie. Inject it into your request to the target site.
 
 ## Polling Tips
 

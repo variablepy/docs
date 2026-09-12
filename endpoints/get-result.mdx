@@ -5,23 +5,22 @@ description: "Poll for the result of a solving task."
 
 # Get Result
 
-`GET /getTaskResult?taskid=<id>&apikey=<key>`
+`GET /getResult`
 
-Poll this endpoint until the status changes from `processing` to `solved` or `failed`.
+Poll this endpoint until the status changes from `solving` to `solved` or `failed`.
 
 ## Query Parameters
 
 | Parameter | Type | Required | Description |
 | --- | --- | --- | --- |
-| `taskid` | string | Yes | Task ID from createTask response |
-| `apikey` | string | Yes | Your API key |
+| `task_id` | string | Yes | Task ID from createTask response |
 
-You can also use `task_id` or `taskId` as parameter names.
+You can also use `taskId`, `taskid`, or pass `task_id` in a POST body.
 
-## Response — Processing
+## Response — Solving
 
 ```json
-{ "status": "processing" }
+{ "status": "solving" }
 ```
 
 ## Response — Solved
@@ -29,10 +28,11 @@ You can also use `task_id` or `taskId` as parameter names.
 ```json
 {
   "status": "solved",
-  "token": "P0_eyJ2IjoiMi...",
-  "tasktype": "HCaptchaCaptchaToken",
-  "useragent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
-  "time": "12.5s"
+  "cost": "$0.00150",
+  "solution": {
+    "token": "P0_eyJ2IjoiMi...",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+  }
 }
 ```
 

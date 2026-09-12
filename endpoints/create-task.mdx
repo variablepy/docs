@@ -38,6 +38,10 @@ Alternatively, `tasktype` can be used instead of `type`, and `apikey`/`clientKey
 | `AWSWafTokenProxyless` | No | AWS WAF (no proxy) |
 | `KasadaCtToken` | Yes | Kasada CT Token |
 | `DataDomeTagsCookie` | Yes | DataDome Tags Cookie |
+| `ReCaptchaV3Token` | Yes | reCAPTCHA v3 |
+| `ReCaptchaV3TokenProxyLess` | No | reCAPTCHA v3 (no proxy) |
+| `ReCaptchaV3EnterpriseToken` | Yes | reCAPTCHA v3 Enterprise |
+| `ReCaptchaV3EnterpriseTokenProxyLess` | No | reCAPTCHA v3 Enterprise (no proxy) |
 
 ## Common Task Parameters
 
@@ -46,15 +50,16 @@ Alternatively, `tasktype` can be used instead of `type`, and `apikey`/`clientKey
 | `siteurl` | string | URL of the target page |
 | `proxy` | string | `http://host:port` or `http://user:pass@host:port` |
 | `user_agent` | string | Browser user agent string |
-| `sitekey` | string | Captcha site key (hCaptcha, Turnstile) |
+| `sitekey` | string | Captcha site key (hCaptcha, Turnstile, reCAPTCHA) |
 
 ## Error Responses
 
 | Status | Code | Meaning |
 | --- | --- | --- |
-| 400 | `Missing API key` | No apikey header provided |
+| 400 | `Missing API key` | No key provided |
 | 400 | `Missing siteurl` | siteurl is required |
 | 400 | `Missing sitekey` | sitekey required for this task type |
 | 400 | `Missing proxy` | proxy required for this task type |
+| 400 | `Missing user_agent` | user_agent required for hCaptcha tasks |
 | 402 | `Insufficient balance` | Not enough balance to solve |
 | 403 | `Invalid API key` | Unknown API key |
