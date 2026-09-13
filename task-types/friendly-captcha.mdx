@@ -1,0 +1,79 @@
+---
+title: "FriendlyCaptcha"
+description: "Solve FriendlyCaptcha v1 and v2 challenges and retrieve the response token."
+---
+
+# FriendlyCaptcha
+
+Solve FriendlyCaptcha proof-of-work challenges — both the v1 widget (`friendly-challenge`) and the v2 SDK (`@friendlycaptcha/sdk`) — and receive the response token the site's backend verifies.
+
+## Task Types
+
+- `FriendlyCaptchaToken` — requires your proxy
+- `FriendlyCaptchaTokenProxyLess` — no proxy
+
+## Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `siteurl` | string | Yes | Page URL with the captcha |
+| `sitekey` | string | Yes | FriendlyCaptcha site key |
+| `modulescript` | string | Yes | Full URL of the widget script the page loads. v1: `.../friendly-challenge@X.Y.Z/widget.module.min.js`, v2: `.../@friendlycaptcha/sdk@X.Y.Z/site.min.js` |
+| `version` | string | No | Widget version (also shown in the `x-frc-client` request header). Detected from `modulescript` when omitted |
+| `proxy` | string | Yes (proxy variant) | `http://user:pass@host:port` |
+| `user_agent` | string | No | Browser user agent; keep it consistent with the proxy's browser so the TLS fingerprint matches |
+
+## Request — v2 SDK
+
+```json
+{
+  "type": "FriendlyCaptchaToken",
+  "task": {
+    "siteurl": "https://example.com/signup",
+    "sitekey": "FCMGEMUD2KTDSQ5H",
+    "modulescript": "https://cdn.jsdelivr.net/npm/@friendlycaptcha/sdk@1.1.1/site.min.js",
+    "proxy": "http://user:pass@host:port",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+  }
+}
+```
+
+## Request — v1 Widget
+
+```json
+{
+  "type": "FriendlyCaptchaToken",
+  "task": {
+    "siteurl": "https://example.com/contact",
+    "sitekey": "FCMGEMUD2KTDSQ5H",
+    "modulescript": "https://cdn.jsdelivr.net/npm/friendly-challenge@0.9.19/widget.module.min.js",
+    "proxy": "http://user:pass@host:port"
+  }
+}
+```
+
+## Request — Proxyless
+
+```json
+{
+  "type": "FriendlyCaptchaTokenProxyLess",
+  "task": {
+    "siteurl": "https://example.com/signup",
+    "sitekey": "FCMGEMUD2KTDSQ5H",
+    "modulescript": "https://cdn.jsdelivr.net/npm/@friendlycaptcha/sdk@1.1.1/site.min.js"
+  }
+}
+```
+
+## Price
+
+\$1.20 / 1k solves
+
+## Response Token
+
+The `token` field contains the exact response value the widget writes into the hidden form field (`frc-captcha-response` on v2, `frc-captcha-solution` on v1). Submit it to the site the same way the widget would.
+
+## Notes
+
+- v2 challenges are difficulty-driven: the harder the challenge issued for your proxy and session, the longer the solve takes.
+- Keep the `user_agent` consistent with the proxy's geo and browser version; mismatches raise the challenge difficulty.

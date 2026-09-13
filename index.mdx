@@ -30,6 +30,8 @@ https://api.hydrosolves.gay
 | `ReCaptchaV3TokenProxyLess` | \$0.50 |
 | `ReCaptchaV3EnterpriseToken` | \$0.50 |
 | `ReCaptchaV3EnterpriseTokenProxyLess` | \$0.50 |
+| `FriendlyCaptchaToken` | \$1.20 |
+| `FriendlyCaptchaTokenProxyLess` | \$1.20 |
 
 ## Quick Example
 
@@ -54,4 +56,4 @@ curl -X POST https://api.hydrosolves.gay/createTask \
 2. **Poll for result** — `GET /getResult?task_id=<id>`
 3. **Use the token** — inject the solved token into your site
 
-Most solves complete in under 60 seconds. DataDome solves in under 1 second.
+Most solves complete in under 60 seconds. DataDome solves in under 1 second. FriendlyCaptcha solve time scales with the challenge difficulty issued for your proxy and session.
