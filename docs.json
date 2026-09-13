@@ -47,7 +47,8 @@
           "task-types/cloudflare-jsd-cookie",
           "task-types/kasada-ct-token",
           "task-types/recaptcha-v3",
-          "task-types/friendly-captcha"
+          "task-types/friendly-captcha",
+          "task-types/text-recognition"
         ]
       },
       {

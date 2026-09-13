@@ -1,0 +1,47 @@
+---
+title: "Text Recognition"
+description: "Read text out of an image with an AI vision model and return it as the solution."
+---
+
+# Text Recognition
+
+Read the text in an image with an AI vision model. Send the image as base64 and get the recognized text back in the solution.
+
+## Task Types
+
+- `TextRecognition` — no proxy required
+
+## Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `base64` | string | Yes | Image data as base64, with or without a `data:image/png;base64,` prefix |
+| `siteurl` | string | Yes | Page URL the image came from (context only) |
+| `instructions` | string | No | Extra instructions appended to the recognition prompt (for example `read only the middle line`) |
+
+## Request
+
+```json
+{
+  "type": "TextRecognition",
+  "task": {
+    "siteurl": "https://example.com/login",
+    "base64": "iVBORw0KGgoAAAANSUhEUgAAAQQAAABaCAIAAADRmb9uAAAD6UlEQVR4nO3d...",
+    "instructions": ""
+  }
+}
+```
+
+## Price
+
+\$0.05 / 1k solves
+
+## Response Token
+
+The `token` field contains the recognized text exactly as read from the image, case and punctuation preserved.
+
+## Notes
+
+- Works with PNG, JPEG and WEBP payloads.
+- Recognition runs on an AI vision model, so odd fonts and heavy distortion are handled better than classic OCR.
+- Image size does not change the price; the per-solve charge is flat.
