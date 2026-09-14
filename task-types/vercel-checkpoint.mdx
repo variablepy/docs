@@ -46,6 +46,6 @@ Solve the Vercel security checkpoint (Attack Challenge Mode) and get the `_vcrcs
 ## Notes
 
 - The cookie is bound to the IP and user agent that solved it. Send both back with your follow-up requests, and use the same proxy for the same site.
-- Solve time is typically 25-90 seconds. Vercel validates browser fingerprint telemetry, so the challenge is executed in a real browser profile (mouse activity included) rather than a plain HTTP replay.
+- Solve time is typically 25-90 seconds. Vercel validates browser fingerprint telemetry, so the challenge is executed in a real browser profile with mouse activity rather than a plain HTTP replay.
 - The checkpoint always answers with `429` plus `x-vercel-mitigated: challenge` and an `x-vercel-challenge-token` header until the visitor is cleared, so treat a `429` on the target site as "not solved yet", not as an API failure.
-- Headless browser quality matters: on a low-core host with a slow proxy exit the challenge can take longer than usual. A real browser user agent, residential proxy and a responsive host give the fastest and most consistent results.
+- Headless browser quality matters: on a low-core host or a slow proxy exit the challenge takes longer. A responsive host and a clean residential proxy give the fastest, most consistent results.
