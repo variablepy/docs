@@ -1,0 +1,55 @@
+---
+title: "CaptchaFox"
+description: "Solve CaptchaFox challenges and retrieve the response token."
+---
+
+# CaptchaFox
+
+Solve CaptchaFox (proof-of-work + fingerprint challenge) and get the response token back in the solution.
+
+## Task Types
+
+- `CaptchaFoxToken` — requires your proxy
+
+## Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `siteurl` | string | Yes | Full URL of the page that loads the widget, for example `https://example.com/login` |
+| `sitekey` | string | Yes | CaptchaFox site key, the `sk_...` value passed to the widget |
+| `user_agent` | string | Yes | User agent the token is bound to |
+| `api_server` | string | Yes | CaptchaFox API host, normally `https://api.captchafox.com` |
+| `proxy` | string | Yes | Proxy in `http://user:pass@host:port` format |
+
+## Request
+
+```json
+{
+  "type": "CaptchaFoxToken",
+  "task": {
+    "siteurl": "https://example.com/login",
+    "sitekey": "sk_xxxxxxxxxxxxxxxxxxxxxxxx",
+    "user_agent": "Mozilla/5.0 ...",
+    "api_server": "https://api.captchafox.com",
+    "proxy": "http://user:pass@host:port"
+  }
+}
+```
+
+## Price
+
+\$0.80 / 1k solves
+
+## Response
+
+| Field | Description |
+| --- | --- |
+| `solution.token` | CaptchaFox response token to submit with your request |
+| `solution.user_agent` | User agent the token was issued to |
+
+## Notes
+
+- The challenge is pure proof-of-work, no browser is used, so solves normally finish in a few seconds.
+- The token is bound to the IP and user agent that solved it. Send the same proxy and user agent with the request that consumes the token.
+- Tokens expire after 3 minutes, so consume them promptly.
+- If the user agent you pass cannot be matched to a supported browser profile, the solve runs with a matching profile user agent and `solution.user_agent` reports the user agent that was actually used.
