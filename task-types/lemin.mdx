@@ -1,0 +1,48 @@
+---
+title: "Lemin"
+description: "Solve Lemin cropped puzzles and retrieve the answer plus pre-validation token."
+---
+
+# Lemin
+
+Solve Lemin cropped puzzles and receive the answer payload plus the pre-validation token Lemin expects on its server-side validation call.
+
+## Task Types
+
+- `LeminToken` — requires a proxy
+- `LeminTokenProxyLess` — solved without a proxy, from our own egress
+
+Both types accept the same parameters and return the same solution.
+
+## Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `siteurl` | string | Yes | Page URL hosting the widget, e.g. `https://example.com/login` |
+| `captcha_id` | string | Yes | Captcha key from the widget script URL, e.g. `CROPPED_b6fb18a_eb49f27e803e4f59af232e0b5d826ad4` |
+| `div_id` | string | Yes | Id of the container element the widget is mounted in, e.g. `lemin-cropped-captcha` |
+| `proxy` | string | Yes for `LeminToken` | `http://user:pass@host:port` |
+| `user_agent` | string | No | User agent to solve with, defaults to our Firefox profile |
+| `lemin_subdomain` | string | No | API subdomain override, defaults to `api` (`https://api.leminnow.com`) |
+
+## Request
+
+```json
+{
+  "type": "LeminToken",
+  "task": {
+    "siteurl": "https://example.com/login",
+    "captcha_id": "CROPPED_b6fb18a_eb49f27e803e4f59af232e0b5d826ad4",
+    "div_id": "lemin-cropped-captcha",
+    "proxy": "http://user:pass@host:port"
+  }
+}
+```
+
+## Solution
+
+`token` is the `lemin_answer` value to submit with your form, and `challenge_id` is the challenge it belongs to — submit them as `lemin_answer` and `lemin_challenge_id` and let your backend call Lemin's `/captcha/v1/cropped/validate` with your private key.
+
+## Price
+
+\$1.00 / 1k solves for both `LeminToken` and `LeminTokenProxyLess`.
