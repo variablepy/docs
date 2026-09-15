@@ -29,8 +29,8 @@ Alternatively, `tasktype` can be used instead of `type`, and `apikey`/`clientKey
 
 | Task Type | Proxy Required | Price / 1k Solves |
 | --- | --- | --- |
-| `HCaptchaCaptchaToken` | Yes | \$1.50 |
-| `HCaptchaEnterpriseToken` | Yes | \$2.00 |
+| `HCaptchaCaptchaToken` | Yes | \$0.40 (`hsl`) / \$1.50 (`hsw`) |
+| `HCaptchaEnterpriseToken` | Yes | \$0.40 (`hsl`) / \$2.00 (`hsw`) |
 | `TurnstileCaptcha` | Yes | \$0.09 |
 | `TurnstileCaptchaProxyless` | No | \$0.09 |
 | `CloudflareJsdCookie` | Yes | \$0.20 |
@@ -55,7 +55,7 @@ Alternatively, `tasktype` can be used instead of `type`, and `apikey`/`clientKey
 | `proxy` | string | `http://host:port` or `http://user:pass@host:port` |
 | `user_agent` | string | Browser user agent string |
 | `sitekey` | string | Captcha site key (hCaptcha, Turnstile, reCAPTCHA) |
-| `pow_type` | string | Proof-of-work engine for hCaptcha: `hsl` (native) or `hsw` (browser) |
+| `pow_type` | string | Proof-of-work engine for hCaptcha: `hsl` (native SHA-1) or `hsw` (WASM). Defaults to `hsl` on `HCaptchaCaptchaToken` and `hsw` on `HCaptchaEnterpriseToken` |
 
 ## Error Responses
 
@@ -66,5 +66,6 @@ Alternatively, `tasktype` can be used instead of `type`, and `apikey`/`clientKey
 | 400 | `Missing sitekey` | sitekey required for this task type |
 | 400 | `Missing proxy` | proxy required for this task type |
 | 400 | `Missing user_agent` | user_agent required for hCaptcha tasks |
+| 400 | `Invalid pow_type` | pow_type must be `hsl` or `hsw` |
 | 402 | `Insufficient balance` | Not enough balance to solve |
 | 403 | `Invalid API key` | Unknown API key |
