@@ -9,8 +9,8 @@ Solve hCaptcha and hCaptcha Enterprise challenges and receive a verification tok
 
 ## Task Types
 
-- `HCaptchaCaptchaToken` — standard hCaptcha, solved with the native `hsl` proof of work
-- `HCaptchaEnterpriseToken` — hCaptcha Enterprise, solved with the browser `hsw` proof of work
+- `HCaptchaCaptchaToken` — standard hCaptcha, solved with the `hsl` proof of work by default
+- `HCaptchaEnterpriseToken` — hCaptcha Enterprise, solved with the `hsw` proof of work by default
 
 Both types accept the same parameters. The proof-of-work engine can be overridden per task with `pow_type`.
 
@@ -29,10 +29,10 @@ Both types accept the same parameters. The proof-of-work engine can be overridde
 
 | `pow_type` | Engine | Notes |
 | --- | --- | --- |
-| `hsl` | Native SHA-1 proof of work | Runs without a browser, fast and low overhead |
-| `hsw` | Browser WASM proof of work | Required by enterprise sitekeys |
+| `hsl` | Native SHA-1 proof of work | Fast and low overhead |
+| `hsw` | WASM proof of work | Required by enterprise sitekeys |
 
-`hsl` is the default for standard tasks and costs less. Set `pow_type` to `hsw` only when a target demands the enterprise proof.
+`hsl` is the default for standard tasks and is the cheaper engine. Set `pow_type` to `hsw` only when a target demands the enterprise proof. Pricing per engine is listed below.
 
 ## Request — Standard
 
@@ -66,8 +66,12 @@ Both types accept the same parameters. The proof-of-work engine can be overridde
 
 ## Price
 
-- Standard (`hsl`): \$0.40 / 1k solves
-- Enterprise (`hsw`): \$2.00 / 1k solves
+| Task Type | `pow_type` | Price / 1k Solves |
+| --- | --- | --- |
+| `HCaptchaCaptchaToken` | `hsl` | \$0.40 |
+| `HCaptchaCaptchaToken` | `hsw` | \$1.50 |
+| `HCaptchaEnterpriseToken` | `hsl` | \$0.40 |
+| `HCaptchaEnterpriseToken` | `hsw` | \$2.00 |
 
 ## Response Token
 
