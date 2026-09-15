@@ -46,6 +46,8 @@ Alternatively, `tasktype` can be used instead of `type`, and `apikey`/`clientKey
 | `FriendlyCaptchaTokenProxyLess` | No | \$1.20 |
 | `TextRecognition` | No | \$0.05 |
 | `CaptchaFoxToken` | Yes | \$0.80 |
+| `LeminToken` | Yes | \$1.00 |
+| `LeminTokenProxyLess` | No | \$1.00 |
 
 ## Common Task Parameters
 
@@ -56,6 +58,9 @@ Alternatively, `tasktype` can be used instead of `type`, and `apikey`/`clientKey
 | `user_agent` | string | Browser user agent string |
 | `sitekey` | string | Captcha site key (hCaptcha, Turnstile, reCAPTCHA) |
 | `pow_type` | string | Proof-of-work engine for hCaptcha: `hsl` (native SHA-1) or `hsw` (WASM). Defaults to `hsl` on `HCaptchaCaptchaToken` and `hsw` on `HCaptchaEnterpriseToken` |
+| `captcha_id` | string | Lemin captcha key, taken from the widget script URL |
+| `div_id` | string | Lemin container element id the widget is mounted in |
+| `lemin_subdomain` | string | Lemin API subdomain override, defaults to `api` (`https://api.leminnow.com`) |
 
 ## Error Responses
 
