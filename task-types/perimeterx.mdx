@@ -1,0 +1,71 @@
+---
+title: "PerimeterX"
+description: "Solve PerimeterX challenges and retrieve the px cookie set."
+---
+
+# PerimeterX
+
+Solve PerimeterX (HUMAN Security) challenges and receive the `_px` cookie set for your proxy and user agent.
+
+## Task Types
+
+- `PerimeterXToken` — requires a proxy
+- `PerimeterXTokenProxyLess` — solved without a proxy, from our own egress
+
+Both types accept the same parameters and return the same solution.
+
+## Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `pxappid` | string | Yes | PerimeterX application id, e.g. `PXu6b0qd2S` |
+| `proxy` | string | Yes for `PerimeterXToken` | `http://user:pass@host:port` |
+| `siteurl` | string | No | Target page; when supplied the session is taken to the site so the edge can issue the full cookie set |
+| `user_agent` | string | No | User agent to solve with, defaults to our Chrome profile |
+
+## Finding Your App Id
+
+The app id is in the client script the site loads:
+
+```html
+<script src="https://client.px-cloud.net/PXu6b0qd2S/main.min.js"></script>
+```
+
+It is also sent as `appId` on every collector request.
+
+## Request
+
+```json
+{
+  "type": "PerimeterXToken",
+  "task": {
+    "pxappid": "PXu6b0qd2S",
+    "siteurl": "https://www.walmart.com/",
+    "proxy": "http://user:pass@host:port"
+  }
+}
+```
+
+## Solution
+
+| Field | Description |
+| --- | --- |
+| `cookies` | The `_px` cookie set (`_pxvid`, `pxcts`, `_pxde`, `_px3` where the session qualifies), semicolon separated |
+| `user_agent` | User agent the session was built with — reuse it together with the same proxy |
+
+```json
+{
+  "status": "solved",
+  "cost": "$0.00150",
+  "solution": {
+    "cookies": "_pxvid=0efb1e66-...; pxcts=0BJpyw...; _pxde=dd2b9d1d...",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+  }
+}
+```
+
+Send the cookie set back to the target with the same proxy, user agent and accept-language — PerimeterX binds the session to the network identity that produced it.
+
+## Price
+
+\$1.50 / 1k solves for both `PerimeterXToken` and `PerimeterXTokenProxyLess`.

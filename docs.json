@@ -50,7 +50,8 @@
           "task-types/friendly-captcha",
           "task-types/text-recognition",
           "task-types/captcha-fox",
-          "task-types/lemin"
+          "task-types/lemin",
+          "task-types/perimeterx"
         ]
       },
       {
