@@ -46,6 +46,17 @@ You can also use `taskId`, `taskid`, or pass `task_id` in a POST body.
 }
 ```
 
+## Type-Specific Fields
+
+Most task types return `token` and `user_agent`. A few add fields the target expects:
+
+| Task type | Additional solution fields |
+| --- | --- |
+| `CloudflareJsdCookie` | `cookies` instead of `token` |
+| `KasadaCtToken` | `cookies`, `headers` |
+| `TurnstileCaptcha`, `TurnstileCaptchaProxyless` | `supressed` |
+| `LeminToken`, `LeminTokenProxyLess` | `challenge_id` — submit it alongside the token as `lemin_challenge_id` |
+
 ## Result Retention
 
 Results are stored for 5 minutes after solving. After that, they are cleaned up.
