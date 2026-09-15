@@ -9,10 +9,10 @@ Solve hCaptcha and hCaptcha Enterprise challenges and receive a verification tok
 
 ## Task Types
 
-- `HCaptchaCaptchaToken` — standard hCaptcha
-- `HCaptchaEnterpriseToken` — hCaptcha Enterprise
+- `HCaptchaCaptchaToken` — standard hCaptcha, solved with the native `hsl` proof of work
+- `HCaptchaEnterpriseToken` — hCaptcha Enterprise, solved with the browser `hsw` proof of work
 
-Both types share the same parameters and behavior.
+Both types accept the same parameters. The proof-of-work engine can be overridden per task with `pow_type`.
 
 ## Parameters
 
@@ -23,6 +23,16 @@ Both types share the same parameters and behavior.
 | `proxy` | string | Yes | `http://user:pass@host:port` |
 | `user_agent` | string | Yes | Browser user agent |
 | `rqdata` | string | No | Request data from the page |
+| `pow_type` | string | No | `hsl` or `hsw`. Defaults to `hsl` on `HCaptchaCaptchaToken` and `hsw` on `HCaptchaEnterpriseToken` |
+
+## Proof Of Work
+
+| `pow_type` | Engine | Notes |
+| --- | --- | --- |
+| `hsl` | Native SHA-1 proof of work | Runs without a browser, fast and low overhead |
+| `hsw` | Browser WASM proof of work | Required by enterprise sitekeys |
+
+`hsl` is the default for standard tasks and costs less. Set `pow_type` to `hsw` only when a target demands the enterprise proof.
 
 ## Request — Standard
 
@@ -33,7 +43,8 @@ Both types share the same parameters and behavior.
     "sitekey": "10000000-ffff-ffff-ffff-000000000001",
     "siteurl": "https://example.com/login",
     "proxy": "http://user:pass@host:port",
-    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36"
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36",
+    "pow_type": "hsl"
   }
 }
 ```
@@ -47,15 +58,16 @@ Both types share the same parameters and behavior.
     "sitekey": "10000000-ffff-ffff-ffff-000000000001",
     "siteurl": "https://example.com/login",
     "proxy": "http://user:pass@host:port",
-    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36"
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36",
+    "pow_type": "hsw"
   }
 }
 ```
 
 ## Price
 
-- Standard: \$1.50 / 1k solves
-- Enterprise: \$2.00 / 1k solves
+- Standard (`hsl`): \$0.40 / 1k solves
+- Enterprise (`hsw`): \$2.00 / 1k solves
 
 ## Response Token
 
