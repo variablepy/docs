@@ -25,6 +25,18 @@ Both types accept the same parameters and return the same solution.
 | `user_agent` | string | No | User agent to solve with, defaults to our Firefox profile |
 | `lemin_subdomain` | string | No | API subdomain override, defaults to `api` (`https://api.leminnow.com`) |
 
+## Finding Your Parameters
+
+Both values come from the page that loads the widget:
+
+```html
+<div id="lemin-cropped-captcha"></div>
+<script src="https://api.leminnow.com/captcha/v1/cropped/CROPPED_b6fb18a_eb49f27e803e4f59af232e0b5d826ad4/js"></script>
+```
+
+- `captcha_id` is the path segment before `/js`
+- `div_id` is the id of the div the script is placed in
+
 ## Request
 
 ```json
@@ -41,7 +53,25 @@ Both types accept the same parameters and return the same solution.
 
 ## Solution
 
-`token` is the `lemin_answer` value to submit with your form, and `challenge_id` is the challenge it belongs to — submit them as `lemin_answer` and `lemin_challenge_id` and let your backend call Lemin's `/captcha/v1/cropped/validate` with your private key.
+| Field | Description |
+| --- | --- |
+| `token` | The `lemin_answer` value to submit with your form: the drag trajectory with the pre-validation token appended (`<trajectory>_?_gAAAAAB...`) |
+| `challenge_id` | The challenge the token belongs to — submit it as `lemin_challenge_id` |
+| `user_agent` | User agent the solve was performed with, reuse it for the submission |
+
+```json
+{
+  "status": "solved",
+  "cost": "$0.00100",
+  "solution": {
+    "token": "0xaxcgx0x0xc6x0x0bix..._?_gAAAAABqqPxV...",
+    "challenge_id": "b5db51e4-b4e1-4f98-9823-e1764457339b",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:155.0) Gecko/20100101 Firefox/155.0"
+  }
+}
+```
+
+Lemin validates on the server side, so both values are needed: hand them to your backend as `lemin_challenge_id` and `lemin_answer`, and let it call Lemin's `/captcha/v1/cropped/validate` with your private key.
 
 ## Price
 
