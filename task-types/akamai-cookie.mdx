@@ -1,0 +1,49 @@
+---
+title: "Akamai Cookie"
+description: "Solve Akamai Bot Manager and retrieve the _abck cookie."
+---
+
+## Task Type
+
+`AkamaiCookie`
+
+## Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `siteurl` | string | Yes | Page URL protected by Akamai Bot Manager |
+| `proxy` | string | Yes | `http://user:pass@host:port` |
+| `user_agent` | string | Yes | User agent the solve runs under |
+
+## Request
+
+```json
+{
+  "type": "AkamaiCookie",
+  "task": {
+    "siteurl": "https://www.ups.com/us/en/Home.page",
+    "proxy": "http://user:pass@host:port",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+  }
+}
+```
+
+## Price
+
+\$0.30 / 1k solves
+
+## Response
+
+The solution returns the Akamai cookies instead of a token:
+
+```json
+{
+  "status": "solved",
+  "solution": {
+    "cookies": "_abck=...; bm_sz=...; bm_s=...; bm_so=...",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+  }
+}
+```
+
+Send `cookies` and `user_agent` together on your own requests. `_abck` is the sensor cookie Akamai expects, so reuse the same user agent or the cookie will not be trusted. `bm_sz`, `bm_s`, and `bm_so` are included when the edge issues them in the same session.

@@ -50,6 +50,7 @@
           "task-types/friendly-captcha",
           "task-types/text-recognition",
           "task-types/captcha-fox",
+          "task-types/akamai-cookie",
           "task-types/lemin"
         ]
       },
