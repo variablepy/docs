@@ -47,3 +47,9 @@ The solution returns the Akamai cookies instead of a token:
 ```
 
 Send `cookies` and `user_agent` together on your own requests. `_abck` is the sensor cookie Akamai expects, so reuse the same user agent or the cookie will not be trusted. `bm_sz`, `bm_s`, and `bm_so` are included when the edge issues them in the same session.
+
+## User agent alignment
+
+A solve runs on a browser fingerprint whose version must match the user agent it claims. If the `user_agent` you send names a browser build we have no matching fingerprint for, the solver aligns it to the closest available build and returns the agent it actually used in `user_agent`.
+
+Always send the returned `user_agent` on your own requests rather than the one you submitted — a fingerprint/version mismatch is exactly what Akamai answers with `403 Access Denied`.
