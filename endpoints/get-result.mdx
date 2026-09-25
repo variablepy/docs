@@ -57,6 +57,7 @@ Most task types return `token` and `user_agent`. A few add fields the target exp
 | `TurnstileCaptcha`, `TurnstileCaptchaProxyless` | `supressed` |
 | `LeminToken`, `LeminTokenProxyLess` | `challenge_id` — submit it alongside the token as `lemin_challenge_id` |
 | `AkamaiCookie` | `cookies` instead of `token` |
+| `FunCaptchaToken` | `token`, plus `suppressed` and `user_agent` |
 
 ## Result Retention
 
