@@ -1,11 +1,11 @@
 ---
-title: "Funcaptcha Token"
+title: "FunCaptcha Token"
 description: "Solve Arkose Labs FunCaptcha and retrieve a token."
 ---
 
 ## Task Type
 
-`FuncaptchaToken`
+`FunCaptchaToken`
 
 ## Parameters
 
@@ -19,11 +19,13 @@ description: "Solve Arkose Labs FunCaptcha and retrieve a token."
 | `blob` | string | No | Data exchange blob, when the site requires one |
 | `language` | string | No | Widget language, defaults to `en-US` |
 
+The solve runs entirely through your proxy, so use a clean residential exit for this type.
+
 ## Request
 
 ```json
 {
-  "type": "FuncaptchaToken",
+  "type": "FunCaptchaToken",
   "task": {
     "siteurl": "https://www.roblox.com/login",
     "sitekey": "476068BF-9607-4799-B53D-966BE98E2B81",
@@ -36,7 +38,7 @@ description: "Solve Arkose Labs FunCaptcha and retrieve a token."
 
 ## Price
 
-\$0.50 / 1k solves
+\\\$0.50 / 1k solves
 
 ## Response
 
@@ -44,7 +46,7 @@ description: "Solve Arkose Labs FunCaptcha and retrieve a token."
 {
   "status": "solved",
   "solution": {
-    "token": "96218d87f862af133.2864965103|r=us-east-1|meta=3|lang=en|pk=476068BF-...|...",
+    "token": "47118d880c37520c7.7768754203|r=us-east-1|meta=3|lang=en|pk=476068BF-...|sup=1|...",
     "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
     "suppressed": true
   }
