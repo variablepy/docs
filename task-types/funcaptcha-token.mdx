@@ -1,0 +1,58 @@
+---
+title: "Funcaptcha Token"
+description: "Solve Arkose Labs FunCaptcha and retrieve a token."
+---
+
+## Task Type
+
+`FuncaptchaToken`
+
+## Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `siteurl` | string | Yes | Page URL that loads the Arkose widget |
+| `sitekey` | string | Yes | Arkose public key, the UUID in the widget's `api.js` URL |
+| `proxy` | string | Yes | `http://user:pass@host:port` |
+| `user_agent` | string | Yes | User agent the solve runs under |
+| `surl` | string | No | Arkose verify host, defaults to `https://client-api.arkoselabs.com` |
+| `blob` | string | No | Data exchange blob, when the site requires one |
+| `language` | string | No | Widget language, defaults to `en-US` |
+
+## Request
+
+```json
+{
+  "type": "FuncaptchaToken",
+  "task": {
+    "siteurl": "https://www.roblox.com/login",
+    "sitekey": "476068BF-9607-4799-B53D-966BE98E2B81",
+    "surl": "https://arkoselabs.roblox.com",
+    "proxy": "http://user:pass@host:port",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+  }
+}
+```
+
+## Price
+
+\$0.50 / 1k solves
+
+## Response
+
+```json
+{
+  "status": "solved",
+  "solution": {
+    "token": "96218d87f862af133.2864965103|r=us-east-1|meta=3|lang=en|pk=476068BF-...|...",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+    "suppressed": true
+  }
+}
+```
+
+Send `token` and `user_agent` together on your own requests. The token is bound to the session it was minted in, so reuse the returned user agent.
+
+`suppressed: true` means the token carries `sup=1` and passes without showing a challenge. When Arkose grades the session lower, the token is still minted, `suppressed` comes back `false`, and the widget may present a puzzle. Arkose decides this per request, so retry if you need a suppressed token.
+
+Sites that gate their widget behind a data exchange blob are handled automatically when a blob can be minted for that site; you can also pass your own `blob`. Everything runs natively, no browser is launched.
